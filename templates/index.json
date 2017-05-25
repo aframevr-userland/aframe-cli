@@ -1,0 +1,11 @@
+{
+  "templates": [
+    {
+      "title": "Default A-Frame scene template",
+      "url": "aframevr/aframe-default-template",
+      "technologies": "ES6",
+      "description": "Default template for a default A-Frame scene.",
+      "alias": "default"
+    }
+  ]
+}

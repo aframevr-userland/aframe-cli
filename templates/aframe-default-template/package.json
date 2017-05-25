@@ -1,0 +1,20 @@
+{
+  "name": "aframe-default-template",
+  "description": "Brunch.io application",
+  "author": "A-Frame authors",
+  "version": "0.1.0",
+  "repository": "aframevr/aframe-cli",
+  "scripts": {
+    "start": "npm run dev",
+    "build": "npm run prod",
+    "dev": "brunch watch --server",
+    "prod": "brunch build --production"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "auto-reload-brunch": "^2",
+    "brunch": "^2",
+    "clean-css-brunch": "^2",
+    "uglify-js-brunch": "^2"
+  }
+}
