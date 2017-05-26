@@ -14,6 +14,7 @@ npm install -g aframe-cli
 aframe
 ```
 
+
 ### Commands
 
 To get a list of all commands and options:
@@ -138,6 +139,30 @@ npm run ghpages
 ```
 
 Then submit to the [A-Frame Registry](https://github.com/aframevr/aframe-registry).
+
+
+### CLI development
+
+To work on improving the `aframe` CLI in this repository, first ensure you've set up the project and installed the dependencies:
+
+1. Clone this git repository:
+
+    ```sh
+    git clone git@github.com:cvan/aframe-cli.git
+    ```
+
+2. Install the [Node](https://nodejs.org/en/download/) dependencies:
+
+    ```sh
+    npm install
+    ```
+
+3. Run the CLI:
+
+    ```sh
+    node index.js
+    ```
+
 
 
 ### License
