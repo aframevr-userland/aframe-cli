@@ -17,9 +17,9 @@ acorn@^4.0.3:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.13.tgz#105495ae5361d697bd195c825192e1ad7f253787"
 
-aframe-cli@0.5.4:
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/aframe-cli/-/aframe-cli-0.5.4.tgz#b69ad4081833ae6e63fa80e3a8ea88af76473293"
+aframe-cli@0.5.7:
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/aframe-cli/-/aframe-cli-0.5.7.tgz#6ae766c668dd8b31f24ca7fe374ca90cfea21700"
   dependencies:
     auto-reload-brunch "^2"
     babel-brunch "^6.1.1"
