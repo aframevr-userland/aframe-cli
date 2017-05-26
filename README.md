@@ -22,6 +22,32 @@ To get a list of all commands and options:
 aframe --help
 ```
 
+#### `aframe new <name> [template]`
+
+To create a new A-Frame scene in the working directory:
+
+```sh
+aframe new
+```
+
+To create a new A-Frame scene in a different directory:
+
+```sh
+aframe new my-project-directory
+```
+
+To bootstrap a new A-Frame scene from a boilerplate template:
+
+```sh
+aframe new my-project-directory --template default
+```
+
+From a GitHub repository (such as [`aframevr/aframe-default-template`](https://github.com/aframevr/aframe-default-template)):
+
+```sh
+aframe new my-project-directory --template aframevr/aframe-default-template
+```
+
 #### `aframe install <aframe-component-name> [scene-filename.html]`
 
 Install a component from the [A-Frame Registry](https://aframe.io/registry) to an HTML file. This will detect the A-Frame version from your HTML file and install the appropriate version of the component as a `<script>` tag.
@@ -62,22 +88,7 @@ npm run ghpages
 
 Then submit to the [A-Frame Registry](https://github.com/aframevr/aframe-registry).
 
-#### `aframe create <name> [template]`
 
-Bootstrap an A-Frame scene in the working directory.
+### License
 
-```sh
-aframe new
-```
-
-To specify a name for your scene:
-
-```sh
-aframe new "Spheres and Fog"
-```
-
-To include tracked hand-controls 3D models in your scene:
-
-```sh
-aframe new "Spheres and Fog" controllers
-```
+This source code, including all contributions, is provided under an [MIT License](LICENSE.md).
