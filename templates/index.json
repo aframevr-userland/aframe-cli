@@ -2,14 +2,14 @@
   "templates": [
     {
       "alias": "default",
-      "url": "aframevr/aframe-default-template",
+      "url": "aframevr-userland/aframe-default-template",
       "title": "Default A-Frame scene template",
       "description": "Default template for a default A-Frame scene.",
       "technologies": "ES6"
     },
     {
       "alias": "360-image-gallery",
-      "url": "aframevr/aframe-360-image-gallery-template",
+      "url": "aframevr-userland/aframe-360-image-gallery-template",
       "title": "360° Image Gallery",
       "description": "360° Image Gallery using A-Frame.",
       "components": {
