@@ -180,7 +180,16 @@ To work on improving the `aframe` CLI in this repository, first ensure you've se
     cp -r templates/aframe-default-template/{.gitignore,app,package.json} templates/aframe-new-example-template/.
     ```
 
-3. Open the new directory created (e.g., `templates/aframe-new-example-template/`), use the npm sylink for the `aframe` CLI, and install the [Node](https://nodejs.org/en/download/) dependencies:
+3. Create a git repository for the new directory created (e.g., `templates/aframe-new-example-template/`):
+
+    ```sh
+    export TEMPLATE_NAME=aframe-new-example-template
+    cd templates/$TEMPLATE_NAME/
+    git init .
+    git remote add origin git@github.com:aframevr-userland/$TEMPLATE_NAME.git
+    ```
+
+4. Open the new directory created (e.g., `templates/aframe-new-example-template/`), use the npm sylink for the `aframe` CLI, and install the [Node](https://nodejs.org/en/download/) dependencies:
 
     ```sh
     cd templates/aframe-new-example-template/
@@ -188,13 +197,13 @@ To work on improving the `aframe` CLI in this repository, first ensure you've se
     npm install
     ```
 
-4. From within the template's directory (e.g., `templates/aframe-new-example-template/`), start the local development server:
+5. From within the template's directory (e.g., `templates/aframe-new-example-template/`), start the local development server:
 
     ```sh
     npm start
     ```
 
-5. Now you can start building out this scene template!
+6. Now you can start building out this scene template!
 
 #### Adding components to an A-Frame scene template
 
