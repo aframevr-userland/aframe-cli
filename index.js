@@ -22,6 +22,24 @@ program
   .usage('[command] [options]');
 
 program
+  .command('serve')
+  .alias('s')
+  .description('Serve a new A-Frame project in path.')
+  .option('-e, --env [setting]', 'specify a set of override settings to apply')
+  .option('-p, --production', 'same as `--env production`')
+  .option('-s, --server', 'run a simple HTTP server for the public directory on localhost')
+  .option('-n, --network', 'if `server` was given, allow access from the network')
+  .option('-P, --port [port]', 'if `server` was given, listen on this port')
+  .option('-d, --debug [pattern]', 'print verbose debug output to stdout')
+  .option('-j, --jobs [num]', 'parallelize the build')
+  .option('-c, --config [path]', 'specify a path to Brunch config file')
+  .option('--stdin', 'listen to stdin and exit when stdin closes')
+  .on('--help', () => {
+    // require('./lib/serve.js').printBanner('aframe serve');
+  })
+  .action(commands.serve);
+
+program
   .command('new [path]')
   .alias('n')
   .description('Create a new A-Frame project in path.')

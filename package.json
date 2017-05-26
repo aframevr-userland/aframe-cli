@@ -1,14 +1,13 @@
 {
-  "name": "aframe-default-template",
-  "description": "Brunch.io application",
+  "name": "aframe-cli",
+  "description": "A command-line tool for building A-Frame scenes.",
   "author": "A-Frame authors",
   "version": "0.1.0",
+  "license": "MIT",
   "repository": "aframevr/aframe-cli",
   "scripts": {
-    "start": "npm run dev",
-    "build": "npm run prod",
-    "dev": "brunch watch --server",
-    "prod": "brunch build --production"
+    "start": "npm run cli",
+    "cli": "node index.js"
   },
   "dependencies": {},
   "devDependencies": {
