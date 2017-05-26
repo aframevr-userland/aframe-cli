@@ -8,6 +8,7 @@
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
+    "bootstrap": "oao bootstrap",
     "status": "oao status",
     "component-add": "oao add .",
     "component-remove": "oao remove .",
@@ -22,7 +23,7 @@
     "aframe-template-component": "^3.2.1"
   },
   "devDependencies": {
-    "aframe-cli": "^0.1.1",
+    "aframe-cli": "0.1.1",
     "oao": "^0.8.2"
   }
 }
