@@ -24,6 +24,7 @@
     "fs-extra": "^3.0.1"
   },
   "devDependencies": {
-    "aframe-cli": "^0.0.1"
+    "aframe-cli": "^0.0.1",
+    "oao": "^0.8.2"
   }
 }
