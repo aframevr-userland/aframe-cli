@@ -11,7 +11,8 @@
   "repository": "cvan/aframe-cli",
   "scripts": {
     "start": "npm run cli",
-    "cli": "node index.js"
+    "cli": "node index.js",
+    "publish": "oao publish --src templates/*"
   },
   "dependencies": {
     "auto-reload-brunch": "^2",
