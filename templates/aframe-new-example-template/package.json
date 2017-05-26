@@ -1,0 +1,17 @@
+{
+  "name": "aframe-default-template",
+  "description": "A-Frame WebVR scene",
+  "author": "A-Frame authors",
+  "version": "0.1.0",
+  "repository": "cvan/aframe-default-template",
+  "scripts": {
+    "start": "npm run serve",
+    "serve": "aframe serve"
+  },
+  "dependencies": {
+    "aframe": "^0.5.0"
+  },
+  "devDependencies": {
+    "aframe-cli": "^0.0.1"
+  }
+}

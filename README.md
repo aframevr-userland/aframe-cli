@@ -145,10 +145,11 @@ Then submit to the [A-Frame Registry](https://github.com/aframevr/aframe-registr
 
 To work on improving the `aframe` CLI in this repository, first ensure you've set up the project and installed the dependencies:
 
-1. Clone this git repository:
+1. Clone this git repository, and open the directory created:
 
     ```sh
     git clone git@github.com:cvan/aframe-cli.git
+    cd aframe-cli
     ```
 
 2. Install the [Node](https://nodejs.org/en/download/) dependencies:
@@ -163,6 +164,68 @@ To work on improving the `aframe` CLI in this repository, first ensure you've se
     node index.js
     ```
 
+
+### Creating a new A-Frame scene template (boilerplate project)
+
+1. From the root directory (i.e., cloned checkout of this git repository), create a npm symlink for the `aframe` CLI (i.e., `bin` in this repository's root [`package.json`](package.json) file):
+
+    ```sh
+    npm link
+    ```
+
+2. Create a new directory in the `templates/` directory, by copying over the contents of the default template:
+
+    ```sh
+    mkdir -p templates/aframe-new-example-template/
+    cp -r templates/aframe-default-template/{.gitignore,app,package.json} templates/aframe-new-example-template/.
+    ```
+
+3. Open the new directory created (e.g., `templates/aframe-new-example-template/`), use the npm sylink for the `aframe` CLI, and install the [Node](https://nodejs.org/en/download/) dependencies:
+
+    ```sh
+    cd templates/aframe-new-example-template/
+    npm link aframe-cli
+    npm install
+    ```
+
+4. From within the template's directory (e.g., `templates/aframe-new-example-template/`), start the local development server:
+
+    ```sh
+    npm start
+    ```
+
+5. Now you can start building out this scene template!
+
+#### Adding components to an A-Frame scene template
+
+1. Ensure you're in the template's directory:
+
+    ```sh
+    cd templates/aframe-new-example-template/
+    ```
+
+2. Install an A-Frame component you'd like to use in the template. (Check out the [A-Frame Registry](https://aframe.io/registry) or the [Awesome A-Frame list](https://github.com/aframevr/awesome-aframe#components).)
+
+    ```sh
+    npm install --save aframe-teleport-controls
+    ```
+
+3. Import the module from within the `app/js/initialize.js` JS file in the template's directory (e.g., `templates/aframe-new-example-template/`).
+
+    ```js
+    // For `teleport-controls` component.
+    require('aframe-teleport-controls-component');
+    ```
+
+4. To make use of the component, update the scene's A-Frame HTML markup in the `app/assets/index.html` file, for example:
+
+    ```html
+    <a-scene>
+      <a-entity teleport-controls vive-controls="hand: left"></a-entity>
+    </a-scene>
+    ```
+
+4. Go wild!
 
 
 ### License
