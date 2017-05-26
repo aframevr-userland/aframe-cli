@@ -12,8 +12,4 @@ if (module.parent) {
 const argv = process.argv.slice(2);
 let version = argv[0];
 
-if (!version) {
-  version = require('../package.json').version;
-}
-
 publishTemplates(version);
