@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-process.on('unhandledRejection', err => {
-  throw err;
-});
-process.on('SIGINT', () => {
-  process.exit();
-});
-process.on('SIGTERM', () => {
-  process.exit();
-});
+// process.on('unhandledRejection', err => {
+//   throw err;
+// });
+// process.on('SIGINT', () => {
+//   process.exit();
+// });
+// process.on('SIGTERM', () => {
+//   process.exit();
+// });
 
 const program = require('commander');
 
@@ -24,7 +24,6 @@ program
   .description('Create a new A-Frame project in path.')
   .option('-t, --template [name]', 'template name or URL from https://aframe.io/templates')
   .on('--help', () => {
-    console.log('new --help');
     require('./lib/init-template.js').printBanner('aframe new --template');
   })
   .action(commands.new);
@@ -36,11 +35,11 @@ args[1] = 'aframe';
 
 program.parse(args);
 
-const validCommand = program.commands.some(cmd => {
-  return cmd.name() === command || cmd.alias() === command;
-});
+// const validCommand = program.commands.some(cmd => {
+//   return cmd.name() === command || cmd.alias() === command;
+// });
 
-if (!validCommand) {
-  program.help();
-  process.exit(1);
-}
+// if (!validCommand) {
+//   program.help();
+//   process.exit(1);
+// }
