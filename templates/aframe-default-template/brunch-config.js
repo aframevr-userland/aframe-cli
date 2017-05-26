@@ -10,27 +10,33 @@ module.exports = {
       joinTo: 'css/app.css'
     },
     templates: {
-      joinTo: {'js/app.js': /^app\/templates/}
+      joinTo: {
+        'js/app.js': /^app\/templates/
+      }
     }
   },
   npm: {
     globals: {
-      $: 'jquery',
-      Marionette: 'backbone.marionette',
-      Backbone: 'backbone'
+      AFRAME: 'aframe'
     }
   },
   plugins: {
     babel: {
-      presets: ['es2015'],
+      presets: [
+        'es2015'
+      ],
       ignore: [
         /^(node_modules)/
       ]
     },
     swPrecache: {
-      autorequire: ['public/index.html'],
+      autorequire: [
+        'public/index.html'
+      ],
       options: {
-        staticFileGlobs: ['public/**/!(*map*)'],
+        staticFileGlobs: [
+          'public/**/!(*map*)'
+        ],
         stripPrefix: 'public/'
       }
     }
