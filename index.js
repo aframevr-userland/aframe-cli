@@ -9,7 +9,10 @@ process.on('SIGTERM', () => {
   process.exit();
 });
 
+const path = require('path');
+
 const chalk = require('chalk');
+const fs = require('fs-extra');
 const program = require('commander');
 
 const commands = require('./commands/index.js');
@@ -39,6 +42,14 @@ program
   })
   .action(function (watchPath, options) {
     watchPath = watchPath || process.cwd();
+    if (!options.config) {
+      let brunchConfigPath = path.join(watchPath, 'brunch-config.js');
+      if (fs.existsSync(brunchConfigPath)) {
+        options.config = brunchConfigPath;
+      } else {
+        options.config = path.join(__dirname, 'lib', 'brunch-config.js');
+      }
+    }
     commands.serve(watchPath, options);
   });
 
