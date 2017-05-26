@@ -6,16 +6,8 @@
   "license": "CC0-1.0",
   "repository": "cvan/aframe-360-image-gallery-template",
   "scripts": {
-    "start": "npm run serve-dev",
-    "build": "npm run build-dev",
-    "build-dev": "brunch build",
-    "build-prod": "brunch build --production",
-    "watch": "npm run watch-dev",
-    "watch-dev": "brunch watch --server",
-    "watch-prod": "brunch watch --server --production",
-    "serve": "npm run serve-dev",
-    "serve-dev": "brunch watch --server",
-    "serve-prod": "brunch watch --server --production",
+    "start": "npm run serve",
+    "serve": "aframe serve",
     "component-add": "oao add .",
     "component-remove": "oao remove .",
     "component-upgrade": "oao upgrade .",
@@ -29,11 +21,6 @@
     "aframe-template-component": "^3.2.1"
   },
   "devDependencies": {
-    "auto-reload-brunch": "^2",
-    "babel-brunch": "^6.1.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "brunch": "^2",
-    "clean-css-brunch": "^2",
-    "uglify-js-brunch": "^2"
+    "aframe-cli": "^0.0.1"
   }
 }

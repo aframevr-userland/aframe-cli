@@ -4,6 +4,9 @@
   "author": "A-Frame authors",
   "version": "0.0.1",
   "main": "index.js",
+  "bin": {
+    "aframe": "index.js"
+  },
   "license": "MIT",
   "repository": "cvan/aframe-cli",
   "scripts": {

@@ -22,9 +22,9 @@ program
   .usage('[command] [options]');
 
 program
-  .command('serve')
+  .command('serve [path]')
   .alias('s')
-  .description('Serve a new A-Frame project in path.')
+  .description('Serve a new A-Frame project in path (default: current directory).')
   .option('-e, --env [setting]', 'specify a set of override settings to apply')
   .option('-p, --production', 'same as `--env production`')
   .option('-s, --server', 'run a simple HTTP server for the public directory on localhost')
@@ -37,7 +37,10 @@ program
   .on('--help', () => {
     // require('./lib/serve.js').printBanner('aframe serve');
   })
-  .action(commands.serve);
+  .action(function (watchPath, options) {
+    watchPath = watchPath || process.cwd();
+    commands.serve(watchPath, options);
+  });
 
 program
   .command('new [path]')
