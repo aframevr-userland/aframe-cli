@@ -5,7 +5,7 @@
       "url": "aframevr/aframe-default-template",
       "title": "Default A-Frame scene template",
       "description": "Default template for a default A-Frame scene.",
-      "technologies": "ES6",
+      "technologies": "ES6"
     },
     {
       "alias": "360-image-gallery",
