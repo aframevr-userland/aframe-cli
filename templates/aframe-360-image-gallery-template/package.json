@@ -1,0 +1,39 @@
+{
+  "name": "aframe-360-image-gallery-template",
+  "description": "A-Frame WebVR scene",
+  "author": "A-Frame authors",
+  "version": "0.1.0",
+  "license": "CC0-1.0",
+  "repository": "aframevr/aframe-cli",
+  "scripts": {
+    "start": "npm run serve-dev",
+    "build": "npm run build-dev",
+    "build-dev": "brunch build",
+    "build-prod": "brunch build --production",
+    "watch": "npm run watch-dev",
+    "watch-dev": "brunch watch --server",
+    "watch-prod": "brunch watch --server --production",
+    "serve": "npm run serve-dev",
+    "serve-dev": "brunch watch --server",
+    "serve-prod": "brunch watch --server --production",
+    "component-add": "oao add .",
+    "component-remove": "oao remove .",
+    "component-upgrade": "oao upgrade .",
+    "component-outdated": "oao outdated"
+  },
+  "dependencies": {
+    "aframe": "^0.5.0",
+    "aframe-animation-component": "^3.2.5",
+    "aframe-event-set-component": "^3.0.3",
+    "aframe-layout-component": "^4.1.0",
+    "aframe-template-component": "^3.2.1"
+  },
+  "devDependencies": {
+    "auto-reload-brunch": "^2",
+    "babel-brunch": "^6.1.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "brunch": "^2",
+    "clean-css-brunch": "^2",
+    "uglify-js-brunch": "^2"
+  }
+}

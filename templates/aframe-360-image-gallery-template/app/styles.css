@@ -1,0 +1,12 @@
+html {
+  font-size: 14px;
+}
+
+body {
+  color: #333;
+  font: 1rem/1.5 Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.brunch {
+  text-align: center;
+}
