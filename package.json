@@ -7,7 +7,8 @@
   "repository": "aframevr/aframe-cli",
   "scripts": {
     "start": "npm run cli",
-    "cli": "node index.js"
+    "cli": "node index.js",
+    "publish": "oao publish"
   },
   "dependencies": {},
   "devDependencies": {
