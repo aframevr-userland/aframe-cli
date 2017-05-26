@@ -1,6 +1,6 @@
 {
   "name": "aframe-cli",
-  "description": "A command-line tool for building A-Frame scenes.",
+  "description": "A command-line tool for building, managing, and publishing A-Frame scenes.",
   "author": "A-Frame authors",
   "version": "0.5.4",
   "main": "index.js",

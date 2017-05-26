@@ -1,6 +1,6 @@
 # aframe-cli
 
-A command-line tool for building A-Frame scenes.
+A command-line tool for building, managing, and publishing A-Frame scenes.
 
 > **⚠ NOTE:️ This is not meant to be used just yet. This is a WIP!**
 
