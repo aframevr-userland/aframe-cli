@@ -24,8 +24,23 @@ program
   .description('Create a new A-Frame project in path.')
   .option('-t, --template [name]', 'template name or URL from https://aframe.io/templates')
   .on('--help', () => {
-    require('./lib/init-template.js').printBanner('aframe new -t');
+    console.log('new --help');
+    require('./lib/init-template.js').printBanner('aframe new --template');
   })
   .action(commands.new);
 
-program.parse(process.argv);
+let args = process.argv.slice();
+const command = args[2];
+
+args[1] = 'aframe';
+
+program.parse(args);
+
+const validCommand = program.commands.some(cmd => {
+  return cmd.name() === command || cmd.alias() === command;
+});
+
+if (!validCommand) {
+  program.help();
+  process.exit(1);
+}
