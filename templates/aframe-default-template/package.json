@@ -3,7 +3,7 @@
   "description": "A-Frame WebVR scene",
   "author": "A-Frame authors",
   "version": "0.1.0",
-  "repository": "aframevr/aframe-cli",
+  "repository": "aframevr/aframe-default-template",
   "scripts": {
     "start": "npm run serve-dev",
     "build": "npm run build-dev",
