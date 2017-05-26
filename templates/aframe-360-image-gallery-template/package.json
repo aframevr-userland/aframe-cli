@@ -4,7 +4,7 @@
   "author": "A-Frame authors",
   "version": "0.1.0",
   "license": "CC0-1.0",
-  "repository": "cvan/aframe-360-image-gallery-template",
+  "repository": "aframevr-userland/aframe-360-image-gallery-template",
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",

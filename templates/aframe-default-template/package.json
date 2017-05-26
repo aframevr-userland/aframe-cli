@@ -4,7 +4,7 @@
   "author": "A-Frame authors",
   "version": "0.1.0",
   "license": "CC0-1.0",
-  "repository": "cvan/aframe-default-template",
+  "repository": "aframevr-userland/aframe-default-template",
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve"
