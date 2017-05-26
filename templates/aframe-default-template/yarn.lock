@@ -17,9 +17,9 @@ acorn@^4.0.3:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.13.tgz#105495ae5361d697bd195c825192e1ad7f253787"
 
-aframe-cli@0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/aframe-cli/-/aframe-cli-0.1.1.tgz#ebdd715e3740e1f639365e5a13d48efa4ec4fba5"
+aframe-cli@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/aframe-cli/-/aframe-cli-0.5.2.tgz#c27df60ebf9d8686cdcdcb4021451fa9ba964a57"
   dependencies:
     auto-reload-brunch "^2"
     babel-brunch "^6.1.1"
@@ -30,6 +30,7 @@ aframe-cli@0.1.1:
     clipboardy "^1.1.2"
     commander "^2.9.0"
     fs-extra "^3.0.1"
+    loggy "^1.0.2"
     oao "^0.8.2"
     uglify-js-brunch "^2"
 
@@ -3158,7 +3159,7 @@ log-driver@1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/log-driver/-/log-driver-1.2.5.tgz#7ae4ec257302fd790d557cb10c97100d857b0056"
 
-loggy@^1, loggy@~1.0.1, loggy@~1.0.2:
+loggy@^1, loggy@^1.0.2, loggy@~1.0.1, loggy@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/loggy/-/loggy-1.0.2.tgz#d0ca31c421395f8c462d04870dd2228de3c4e219"
   dependencies:
