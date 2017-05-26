@@ -1,14 +1,20 @@
 {
   "name": "aframe-default-template",
-  "description": "Brunch.io application",
+  "description": "A-Frame WebVR scene",
   "author": "A-Frame authors",
   "version": "0.1.0",
   "repository": "aframevr/aframe-cli",
   "scripts": {
-    "start": "npm run dev",
-    "build": "npm run prod",
-    "dev": "brunch watch --server",
-    "prod": "brunch build --production"
+    "start": "npm run serve-dev",
+    "build": "npm run build-dev",
+    "build-dev": "brunch build",
+    "build-prod": "brunch build --production",
+    "watch": "npm run watch-dev",
+    "watch-dev": "brunch watch --server",
+    "watch-prod": "brunch watch --server --production",
+    "serve": "npm run serve-dev",
+    "serve-dev": "brunch watch --server",
+    "serve-prod": "brunch watch --server --production"
   },
   "dependencies": {
     "aframe": "^0.5.0"
