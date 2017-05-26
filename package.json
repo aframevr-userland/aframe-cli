@@ -2,7 +2,7 @@
   "name": "aframe-cli",
   "description": "A command-line tool for building, managing, and publishing A-Frame scenes.",
   "author": "A-Frame authors",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "main": "index.js",
   "bin": {
     "aframe": "index.js"
