@@ -1,6 +1,6 @@
 {
   "name": "aframe-360-image-gallery-template",
-  "description": "A-Frame WebVR scene",
+  "description": "360° Image Gallery. Made with A-Frame, a WebVR framework.",
   "author": "A-Frame authors",
   "version": "0.1.0",
   "license": "CC0-1.0",
