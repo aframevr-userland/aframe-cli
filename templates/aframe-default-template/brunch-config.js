@@ -1,3 +1,4 @@
+// See docs: http://brunch.io/docs/config
 module.exports = {
   files: {
     javascripts: {
