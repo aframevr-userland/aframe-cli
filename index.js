@@ -37,10 +37,7 @@ program
   .option('-j, --jobs [num]', 'parallelize the build')
   .option('-c, --config [path]', 'specify a path to Brunch config file')
   .option('--stdin', 'listen to stdin and exit when stdin closes')
-  .on('--help', () => {
-    // require('./lib/serve.js').printBanner('aframe serve');
-  })
-  .action(function (watchPath, options) {
+  .action((watchPath, options) => {
     watchPath = watchPath || process.cwd();
     if (!options.config) {
       let brunchConfigPath = path.join(watchPath, 'brunch-config.js');
