@@ -1,4 +1,4 @@
-window.AFRAME = require('aframe');
+require('aframe');
 
 // For `animation` component.
 require('aframe-animation-component');
