@@ -1,7 +1,10 @@
+*.log
+.DS_Store
+.component
 .sw[ponm]
 examples/build.js
 examples/node_modules/
 gh-pages
+my-aframe-project
 node_modules/
-npm-debug.log
-.component
+tmp/
