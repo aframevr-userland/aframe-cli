@@ -22,7 +22,7 @@
     "aframe-template-component": "^3.2.1"
   },
   "devDependencies": {
-    "aframe-cli": "^0.0.2",
+    "aframe-cli": "^0.0.3",
     "oao": "^0.8.2"
   }
 }
