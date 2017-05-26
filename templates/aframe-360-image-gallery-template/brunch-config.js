@@ -3,8 +3,8 @@ module.exports = {
   files: {
     javascripts: {
       joinTo: {
-        'js/app.js': /^(app|node_modules)/,
-        'js/vendor.js': /^(?!app)/  // Match files not in the `app` directory.
+        'js/vendor.js': /^(?!app)/,  // Match files not in the `app` directory.
+        'js/app.js': /^app/
       }
     },
     stylesheets: {
