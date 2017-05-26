@@ -205,6 +205,12 @@ To work on improving the `aframe` CLI in this repository, first ensure you've se
 
 6. Now you can start building out this scene template!
 
+7. Once you're done building the scene, create a [new repository on GitHub](https://github.com/organizations/aframevr-userland/repositories/new) in the [`aframevr-userland` organization](https://github.com/organizations/aframevr-userland), and publish the repository to GitHub:
+
+    ```sh
+    git push origin master -u
+    ```
+
 #### Adding components to an A-Frame scene template
 
 1. Ensure you're in the template's directory:

@@ -8,12 +8,14 @@
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
-    "status": "oao status"
+    "status": "oao status",
+    "deploy": "gh-pages -d .public"
   },
   "dependencies": {
     "aframe": "^0.5.0"
   },
   "devDependencies": {
-    "aframe-cli": "0.5.7"
+    "aframe-cli": "0.5.7",
+    "gh-pages": "^1.0.0"
   }
 }

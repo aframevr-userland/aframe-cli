@@ -13,7 +13,8 @@
     "component-add": "oao add .",
     "component-remove": "oao remove .",
     "component-upgrade": "oao upgrade .",
-    "component-outdated": "oao outdated"
+    "component-outdated": "oao outdated",
+    "deploy": "gh-pages -d .public"
   },
   "dependencies": {
     "aframe": "^0.5.0",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "aframe-cli": "0.1.1",
+    "gh-pages": "^1.0.0",
     "oao": "^0.8.2"
   }
 }
