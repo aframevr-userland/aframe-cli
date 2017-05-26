@@ -2,7 +2,7 @@
   "name": "aframe-360-image-gallery-template",
   "description": "360° Image Gallery. Made with A-Frame, a WebVR framework.",
   "author": "A-Frame authors",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "CC0-1.0",
   "repository": "aframevr-userland/aframe-360-image-gallery-template",
   "scripts": {
@@ -22,7 +22,7 @@
     "aframe-template-component": "^3.2.1"
   },
   "devDependencies": {
-    "aframe-cli": "^0.0.3",
+    "aframe-cli": "^0.1.1",
     "oao": "^0.8.2"
   }
 }
