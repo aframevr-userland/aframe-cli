@@ -2,10 +2,10 @@
 
 const logger = require('loggy');
 
-const publishTemplates = require('../lib/publish-templates');
+const publishTemplates = require('../lib/publish-all');
 
 if (module.parent) {
-  logger.error('`npm run release-templates` should be called from the command line');
+  logger.error('`npm run publish-all` should be called from the command line');
   process.exit(1);
 }
 

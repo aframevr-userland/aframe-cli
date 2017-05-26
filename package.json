@@ -2,7 +2,7 @@
   "name": "aframe-cli",
   "description": "A command-line tool for building A-Frame scenes.",
   "author": "A-Frame authors",
-  "version": "0.1.1",
+  "version": "0.5.0",
   "main": "index.js",
   "bin": {
     "aframe": "index.js"
@@ -13,9 +13,8 @@
     "start": "npm run cli",
     "cli": "node index.js",
     "release": "npm run release-patch",
-    "release-patch": "npm version patch && npm whoami && npm publish && git push --tags",
-    "release-all": "npm run release-templates && npm run publish",
-    "release-templates": "node tools/publish-all-templates.js"
+    "release-patch": "npm version patch",
+    "publish-all": "node tools/publish-all.js"
   },
   "dependencies": {
     "auto-reload-brunch": "^2",
