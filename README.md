@@ -48,6 +48,57 @@ From a GitHub repository (such as [`aframevr/aframe-default-template`](https://g
 aframe new my-project-directory --template aframevr/aframe-default-template
 ```
 
+#### `aframe serve <path> [options]`
+
+To start a local development server for your A-Frame scene from your project's directory:
+
+```sh
+aframe serve
+```
+
+The server (which defaults to listening on port `3333`) you can now load here: **[http://localhost:3333/](http://localhost:3333/)**
+
+To create an A-Frame scene in a different directory:
+
+```sh
+aframe serve my-project-directory
+```
+
+To run in the production mode (how your site would look when published and deployed online):
+
+```sh
+aframe serve my-project-directory --production
+```
+
+To change the server port, for example, to `8080`:
+
+```sh
+aframe serve -P 8080
+```
+
+For other options, refer to the usage information returned from `aframe serve --help`:
+
+```
+  Command: aframe serve
+
+  Usage: serve|s [options] [path]
+
+  Serve an A-Frame project in path (default: current directory).
+
+  Options:
+
+    -h, --help             output usage information
+    -e, --env [setting]    specify a set of override settings to apply
+    -p, --production       same as `--env production`
+    -s, --server           run a simple HTTP server for the public directory on localhost
+    -n, --network          if `server` was given, allow access from the network
+    -P, --port [port]      if `server` was given, listen on this port
+    -d, --debug [pattern]  print verbose debug output to stdout
+    -j, --jobs [num]       parallelize the build
+    -c, --config [path]    specify a path to Brunch config file
+    --stdin                listen to stdin and exit when stdin closes
+```
+
 #### `aframe install <aframe-component-name> [scene-filename.html]`
 
 Install a component from the [A-Frame Registry](https://aframe.io/registry) to an HTML file. This will detect the A-Frame version from your HTML file and install the appropriate version of the component as a `<script>` tag.

@@ -24,7 +24,7 @@ program
 program
   .command('serve [path]')
   .alias('s')
-  .description('Serve a new A-Frame project in path (default: current directory).')
+  .description('Serve an A-Frame project in path (default: current directory).')
   .option('-e, --env [setting]', 'specify a set of override settings to apply')
   .option('-p, --production', 'same as `--env production`')
   .option('-s, --server', 'run a simple HTTP server for the public directory on localhost')
