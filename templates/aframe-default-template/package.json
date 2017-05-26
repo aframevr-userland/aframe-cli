@@ -13,6 +13,6 @@
     "aframe": "^0.5.0"
   },
   "devDependencies": {
-    "aframe-cli": "^0.0.1"
+    "aframe-cli": "^0.0.2"
   }
 }
