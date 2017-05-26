@@ -27,6 +27,7 @@
     "clipboardy": "^1.1.2",
     "commander": "^2.9.0",
     "fs-extra": "^3.0.1",
+    "loggy": "^1.0.2",
     "oao": "^0.8.2",
     "uglify-js-brunch": "^2"
   },
