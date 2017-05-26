@@ -8,8 +8,7 @@
   "repository": "cvan/aframe-cli",
   "scripts": {
     "start": "npm run cli",
-    "cli": "node index.js",
-    "publish": "oao publish"
+    "cli": "node index.js"
   },
   "dependencies": {},
   "devDependencies": {
