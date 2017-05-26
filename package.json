@@ -9,7 +9,7 @@
   "scripts": {
     "start": "npm run cli",
     "cli": "node index.js",
-    "publish": "oao publish"
+    "publish": "oao publish --src templates/*"
   },
   "dependencies": {},
   "devDependencies": {
