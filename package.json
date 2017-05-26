@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
-  "repository": "aframevr/aframe-cli",
+  "repository": "cvan/aframe-cli",
   "scripts": {
     "start": "npm run cli",
     "cli": "node index.js",
