@@ -12,9 +12,10 @@
   "scripts": {
     "start": "npm run cli",
     "cli": "node index.js",
+    "bump": "git checkout master && git pull && npm version patch && npm publish && git push --tags",
     "release": "npm run release-patch",
     "release-patch": "npm version patch",
-    "publish-all": "node tools/publish-all.js"
+    "publish-all": "echo 'This is a WIP! Proceed with caution …' && node tools/publish-all.js"
   },
   "dependencies": {
     "auto-reload-brunch": "^2",
