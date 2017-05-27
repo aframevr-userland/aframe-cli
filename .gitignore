@@ -5,6 +5,7 @@
 examples/build.js
 examples/node_modules/
 gh-pages
+my-*/
 my-aframe-project
 node_modules/
 tmp/
