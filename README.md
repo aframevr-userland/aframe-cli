@@ -173,14 +173,16 @@ To work on improving the `aframe` CLI in this repository, first ensure you've se
     npm link
     ```
 
-2. Create a new directory in the `templates/` directory, by copying over the contents of the default template:
+2. Edit the metadata in the `templates/index.json`, adding a new object to the `templates` array. The only required keys are `alias`, `url`, and `title`.
+
+3. Create a new directory in the `templates/` directory, by copying over the contents of the default template:
 
     ```sh
     mkdir -p templates/aframe-new-example-template/
     cp -r templates/aframe-default-template/{.gitignore,app,package.json} templates/aframe-new-example-template/.
     ```
 
-3. Create a git repository for the new directory created (e.g., `templates/aframe-new-example-template/`):
+4. Create a git repository for the new directory created (e.g., `templates/aframe-new-example-template/`):
 
     ```sh
     export TEMPLATE_NAME=aframe-new-example-template
@@ -189,7 +191,7 @@ To work on improving the `aframe` CLI in this repository, first ensure you've se
     git remote add origin git@github.com:aframevr-userland/$TEMPLATE_NAME.git
     ```
 
-4. Open the new directory created (e.g., `templates/aframe-new-example-template/`), use the npm sylink for the `aframe` CLI, and install the [Node](https://nodejs.org/en/download/) dependencies:
+5. Open the new directory created (e.g., `templates/aframe-new-example-template/`), use the npm sylink for the `aframe` CLI, and install the [Node](https://nodejs.org/en/download/) dependencies:
 
     ```sh
     cd templates/aframe-new-example-template/
@@ -197,15 +199,15 @@ To work on improving the `aframe` CLI in this repository, first ensure you've se
     npm install
     ```
 
-5. From within the template's directory (e.g., `templates/aframe-new-example-template/`), start the local development server:
+6. From within the template's directory (e.g., `templates/aframe-new-example-template/`), start the local development server:
 
     ```sh
     npm start
     ```
 
-6. Now you can start building out this scene template!
+7. Now you can start building out this scene template!
 
-7. Once you're done building the scene, create a [new repository on GitHub](https://github.com/organizations/aframevr-userland/repositories/new) in the [`aframevr-userland` organization](https://github.com/organizations/aframevr-userland), and publish the repository to GitHub:
+8. Once you're done building the scene, create a [new repository on GitHub](https://github.com/organizations/aframevr-userland/repositories/new) in the [`aframevr-userland` organization](https://github.com/organizations/aframevr-userland), and publish the repository to GitHub:
 
     ```sh
     git push origin master -u
