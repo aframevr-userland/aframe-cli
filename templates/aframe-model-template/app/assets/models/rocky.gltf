@@ -33,14 +33,14 @@
             "componentType": 5126,
             "count": 1182,
             "max": [
-                0.997731,
-                0.999475,
-                0.981624
+                0.99548,
+                0.999671,
+                0.986767
             ],
             "min": [
-                -0.997058,
-                -0.999962,
-                -1
+                -0.99548,
+                -0.99471,
+                -0.970338
             ],
             "type": "VEC3"
         },
@@ -433,23 +433,23 @@
     },
     "bufferViews": {
         "bufferView_191": {
-            "buffer": "rocks",
+            "buffer": "rocky",
             "byteLength": 5804,
             "byteOffset": 0,
             "target": 34963
         },
         "bufferView_192": {
-            "buffer": "rocks",
+            "buffer": "rocky",
             "byteLength": 92832,
             "byteOffset": 5804,
             "target": 34962
         }
     },
     "buffers": {
-        "rocks": {
+        "rocky": {
             "byteLength": 98636,
             "type": "arraybuffer",
-            "uri": "rocks.bin"
+            "uri": "rocky.bin"
         }
     },
     "extensionsUsed": [
@@ -464,12 +464,12 @@
     "materials": {
         "Scene-effect": {
             "extensions": {
-              "KHR_materials_common": {
-                "technique": "CONSTANT",
-                "values": {
-                  "emission": "texture_texture_png"
+                "KHR_materials_common": {
+                  "technique": "CONSTANT",
+                  "values": {
+                    "emission": "texture_texture_png"
+                  }
                 }
-              }
             },
             "name": "Scene"
         }
