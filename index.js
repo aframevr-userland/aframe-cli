@@ -25,7 +25,7 @@ program
   .usage('[command] [options]');
 
 program
-  .command('serve [path]')
+  .command('serve [path] [options]')
   .alias('s')
   .description('Serve an A-Frame project in path (default: current directory).')
   .option('-e, --env [setting]', 'specify a set of override settings to apply')
@@ -37,18 +37,18 @@ program
   .option('-j, --jobs [num]', 'parallelize the build')
   .option('-c, --config [path]', 'specify a path to Brunch config file')
   .option('--stdin', 'listen to stdin and exit when stdin closes')
-  .action((watchPath, options) => {
-    watchPath = watchPath || process.cwd();
-    if (!options.config) {
-      let brunchConfigPath = path.join(watchPath, 'brunch-config.js');
-      if (fs.existsSync(brunchConfigPath)) {
-        options.config = brunchConfigPath;
-      } else {
-        options.config = path.join(__dirname, 'lib', 'brunch-config.js');
-      }
-    }
-    commands.serve(watchPath, options);
-  });
+  .action((watchPath, options) => commands.serve(watchPath, options));
+
+program
+  .command('build [path]')
+  .alias('b')
+  .description('Build an A-Frame project in path (default: current directory).')
+  .option('-e, --env [setting]', 'specify a set of override settings to apply')
+  .option('-p, --production', 'same as `--env production`')
+  .option('-d, --debug [pattern]', 'print verbose debug output to stdout')
+  .option('-j, --jobs [num]', 'parallelize the build')
+  .option('-c, --config [path]', 'specify a path to Brunch config file')
+  .action((filePath, options) => commands.build(filePath, options));
 
 program
   .command('new [path]')
