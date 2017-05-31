@@ -1,10 +1,10 @@
 {
-  "name": "aframe-default-template",
-  "description": "A WebVR scene. Made with A-Frame, a WebVR framework.",
+  "name": "aframe-primitives-template",
+  "description": "A-Frame scene built from primitives.",
   "author": "A-Frame authors",
   "version": "0.1.1",
   "license": "CC0-1.0",
-  "repository": "aframevr-userland/aframe-default-template",
+  "repository": "aframevr-userland/aframe-primitives-template",
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
