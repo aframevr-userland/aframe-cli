@@ -1,0 +1,21 @@
+{
+  "name": "aframe-model-template",
+  "description": "A WebVR scene. Made with A-Frame, a WebVR framework.",
+  "author": "A-Frame authors",
+  "version": "0.1.1",
+  "license": "CC0-1.0",
+  "repository": "aframevr-userland/aframe-default-template",
+  "scripts": {
+    "start": "npm run serve",
+    "serve": "aframe serve",
+    "status": "oao status",
+    "deploy": "gh-pages -d .public"
+  },
+  "dependencies": {
+    "aframe": "^0.5.0"
+  },
+  "devDependencies": {
+    "aframe-cli": "0.5.7",
+    "gh-pages": "^1.0.0"
+  }
+}
