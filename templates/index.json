@@ -21,6 +21,14 @@
         "set-image": "./app/js/components/set-image.js"
       },
       "technologies": "ES6"
+    },
+    {
+      "alias": "room",
+      "url": "aframevr-userland/aframe-room-template",
+      "title": "Room template",
+      "description": "Room built using A-Frame.",
+      "components": {},
+      "technologies": "ES6"
     }
   ]
 }
