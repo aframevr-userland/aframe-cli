@@ -49,6 +49,35 @@ From a GitHub repository (such as [`aframevr/aframe-default-template`](https://g
 aframe new my-project-directory --template aframevr/aframe-default-template
 ```
 
+#### `aframe build <path> [options]`
+
+To build the static files (i.e., HTML/CSS/JS) for your A-Frame scene in the working directory:
+
+```sh
+aframe build
+```
+
+The files will be written to the `.public` directory, by default, in your A-Frame project's working directory (you can override the `paths.public` value in your own custom Brunch config file). [This default Brunch config file](lib/brunch-config.js) will be used if a `brunch-config.js` file does not exist and the `--config <path>` flag is not passed when calling `aframe build`).
+
+For other options, refer to the usage information returned from `aframe serve --help`:
+
+```
+  Command: aframe build
+
+  Usage: build|b [options] [path]
+
+  Build an A-Frame project in path (default: current directory).
+
+  Options:
+
+    -h, --help             output usage information
+    -e, --env [setting]    specify a set of override settings to apply
+    -p, --production       same as `--env production`
+    -d, --debug [pattern]  print verbose debug output to stdout
+    -j, --jobs [num]       parallelize the build
+    -c, --config [path]    specify a path to Brunch config file
+```
+
 #### `aframe serve <path> [options]`
 
 To start a local development server for your A-Frame scene from your project's directory:

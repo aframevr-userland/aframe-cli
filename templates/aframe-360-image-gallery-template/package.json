@@ -8,6 +8,7 @@
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
+    "build": "aframe build",
     "bootstrap": "oao bootstrap",
     "status": "oao status",
     "component-add": "oao add .",

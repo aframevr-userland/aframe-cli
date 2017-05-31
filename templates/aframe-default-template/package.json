@@ -8,6 +8,7 @@
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
+    "build": "aframe build",
     "status": "oao status",
     "deploy": "gh-pages -d .public"
   },
