@@ -3,9 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 AFRAME.registerComponent('teleport', {
-  init: function () {
+  play: function () {
     this.el.addEventListener('click', this.handleClick.bind(this));
   },
+
+  pause: function () {
+    this.el.removeEventListener('click', this.handleClick.bind(this));
+  },
+
   handleClick: function (e) {
     var camera = this.el.sceneEl.camera.el;
     var hotspotPosition = e.target.getAttribute('position');
