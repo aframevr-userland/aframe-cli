@@ -11,33 +11,25 @@
   <body>
     <a-scene>
       <a-assets>
-        <a-mixin id="hotspot" geometry="primitive: circle; radius: 0.20" material="color: lightblue"></a-mixin>
-        <a-mixin id="hotspot-select" geometry="primitive: cylinder; radius: 0.3; height: 2; openEnded: true" material="color: lightblue; side: double; opacity: 0.2"></a-mixin>
-        <a-mixin id="hotspot-arrow" rotation="0 0 0" geometry="primitive: cone; radiusTop: 0; radiusBottom: 0.05; height: 0.15;" material="color: rgb(87, 153, 255)"></a-mixin>
+        <a-mixin id="hotspot" geometry="primitive: circle; radius: 0.20" material="src: images/arrow.png; shader: flat"></a-mixin>
       </a-assets>
 
-      <a-entity teleport position="0 0.1 0" rotation="-90 0 0" mixin="hotspot">
-        <a-entity mixin="hotspot-arrow"></a-entity>
-      </a-entity>
-      <a-entity teleport position="2 0.1 -2.5" rotation="-90 90 0" mixin="hotspot">
-        <a-entity mixin="hotspot-arrow"></a-entity>
-      </a-entity>
-      <a-entity teleport position="-2 0.1 -2.5" rotation="-90 -90 0" mixin="hotspot">
-        <a-entity mixin="hotspot-arrow"></a-entity>
-      </a-entity>
-      <a-entity teleport position="0 0.1 -5" rotation="-90 180 0" mixin="hotspot">
-        <a-entity mixin="hotspot-arrow"></a-entity>
-      </a-entity>
+      <a-entity teleport position="0 0.01 0" rotation="-90 0 0" mixin="hotspot"></a-entity>
+      <a-entity teleport position="2 0.01 -2.5" rotation="-90 90 0" mixin="hotspot"></a-entity>
+      <a-entity teleport position="-2 0.01 -2.5" rotation="-90 -90 0" mixin="hotspot"></a-entity>
+      <a-entity teleport position="0 0.01 -5" rotation="-90 180 0" mixin="hotspot"></a-entity>
 
       <a-entity position="0 0 -2.5" rotation="0 180 0">
         <a-entity gltf-model="src: url(models/rocky.gltf)" scale="0.5 0.5 0.5"></a-entity>
       </a-entity>
 
-      <a-entity geometry="primitive: circle; radius: 40" rotation="-90 0 0" material="src: grid.png; repeat: 160 160;" ></a-entity>
-      <a-sky src="sky.png"></a-sky>
+      <a-entity geometry="primitive: circle; radius: 40" rotation="-90 0 0" material="src: images/grid.png; repeat: 160 160;" ></a-entity>
+      <a-sky src="images/sky.png"></a-sky>
 
       <a-camera>
-        <a-cursor></a-cursor>
+        <a-entity raycaster="objects: [teleport]" cursor
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: black; shader: flat" position="0 0 -2"></a-entity>
       <a-camera>
     </a-scene>
   </body>
