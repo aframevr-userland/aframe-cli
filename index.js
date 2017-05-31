@@ -16,7 +16,7 @@ const fs = require('fs-extra');
 const program = require('commander');
 
 const commands = require('./commands/index.js');
-const pkg = require('../package.json');
+const pkg = require('./package.json');
 
 const displayHelp = () => program.help(colorizeHelp);  // This calls `process.exit()`.
 
