@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Room • Made with A-Frame</title>
+    <link rel="stylesheet" href="css/app.css">
+    <script src="js/vendor.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <a-mixin id="chair-material" material="color: rgb(255, 138, 0)"></a-mixin>
+        <a-mixin id="chair-leg" geometry="radius: 0.05"></a-mixin>
+        <a-mixin id="room-walls" material="color: rgb(147, 174, 189); metalness: 0; roughness: 1; side: double"></a-mixin>
+        <a-mixin id="room-trim" material="color: rgb(216, 231, 240)"></a-mixin>
+      </a-assets>
+
+      <!-- forward wall -->
+      <a-entity position="0 0 -4">
+        <a-entity position="0 1.2 0" geometry="primitive: plane; width: 6; height: 2.4" mixin="room-walls"></a-entity>
+        <a-entity position="0 0.1 0.025" geometry="primitive: box; width: 6; height: 0.2; depth: 0.05" mixin="room-trim"></a-entity>
+      </a-entity>
+
+      <!-- left wall -->
+      <a-entity position="-3 0 -1.25" rotation="0 90 0">
+        <a-entity position="0 1.2 0" geometry="primitive: plane; width: 5.5; height: 2.4" mixin="room-walls"></a-entity>
+        <a-entity position="0 0.1 0.025" geometry="primitive: box; width: 5.5; height: 0.2; depth: 0.05" mixin="room-trim"></a-entity>
+      </a-entity>
+
+      <!-- right wall -->
+      <a-entity position="3 0 -2" rotation="0 -90 0">
+        <a-entity position="0 1.2 0" geometry="primitive: plane; width: 4; height: 2.4" mixin="room-walls"></a-entity>
+        <a-entity position="0 0.1 0.025" geometry="primitive: box; width: 4; height: 0.2; depth: 0.05" mixin="room-trim"></a-entity>
+      </a-entity>
+
+      <!-- doorway trim -->
+      <a-entity position="3 0 .75" rotation="0 -90 0">
+        <a-entity position="0 2.3 0.025" geometry="primitive: box; width: 1.5; height: 0.2; depth: 0.05" mixin="room-trim"></a-entity>
+        <a-entity position="-0.75 1.2 0.025" geometry="primitive: box; width: 0.2; height: 2.4; depth: 0.05" mixin="room-trim"></a-entity>
+        <a-entity position="0.65 1.2 0.025" geometry="primitive: box; width: 0.2; height: 2.4; depth: 0.05" mixin="room-trim"></a-entity>
+      </a-entity>
+
+      <!-- back wall -->
+      <a-entity position="0 0 1.5" rotation="0 180 0">
+        <a-entity position="0 1.2 0" geometry="primitive: plane; width: 6; height: 2.4" mixin="room-walls"></a-entity>
+        <a-entity position="0 0.1 0.025" geometry="primitive: box; width: 6; height: 0.2; depth: 0.05" mixin="room-trim"></a-entity>
+      </a-entity>
+
+      <!-- ceiling -->
+      <a-entity position="0 2.4 -1.25" rotation="90 0 0" geometry="primitive: plane; width: 6; height: 5.5"
+        material="color: rgb(147, 174, 189); metalness: 0; roughness: 1"></a-entity>
+
+      <!-- light fixture -->
+      <a-entity light="type: ambient; color: #c6deff; intensity: 0.7"></a-entity>
+      <a-entity position="0 2.4 -1">
+        <a-entity position="0 -0.2 0" light="type: point; color: #fffdec; intensity: 0.6"
+          geometry="primitive: sphere; radius: 0.1;"
+          material="color: #e6f6f7; shader: flat">
+          <a-cylinder position="0 0.2 0" radius="0.01" height="0.2" color="rgb(49, 58, 65)"></a-cylinder>
+          <a-cylinder position="0 0.2 0" radius="0.05" height="0.01" color="rgb(49, 58, 65)"></a-cylinder>
+        </a-entity>
+      </a-entity>
+
+      <!-- chair -->
+      <a-entity position="2.5 0 -2.5" rotation="0 -90 0">
+        <a-cylinder height="0.45" position="-0.2 0.225 0.2" mixin="chair-leg chair-material"></a-cylinder>
+        <a-cylinder height="0.45" position="0.2 0.225 0.2" mixin="chair-leg chair-material"></a-cylinder>
+        <a-cylinder height="1" position="-0.2 0.5 -0.2" mixin="chair-leg chair-material"></a-cylinder>
+        <a-cylinder height="1" position="0.2 0.5 -0.2" mixin="chair-leg chair-material"></a-cylinder>
+        <a-box id="chair-seat" width="0.5" depth="0.5" height="0.1" position="0 0.45 0" mixin="chair-material"></a-box>
+        <a-box id="chair-back" width="0.5" depth="0.1" height="0.3" position="0 0.9 -0.2" mixin="chair-material"></a-box>
+      </a-entity>
+
+      <!-- 0.5m ground grid -->
+      <a-entity geometry="primitive: circle; radius: 40" rotation="-90 0 0" material="src: images/grid.png; repeat: 160 160;" ></a-entity>
+
+      <a-sky src="images/sky.png"></a-sky>
+    </a-scene>
+  </body>
+</html>
