@@ -25,6 +25,16 @@ program
   .usage('[command] [options]');
 
 program
+  .command('new [path]')
+  .alias('n')
+  .description('Create a new A-Frame project in path.')
+  .option('-t, --template [name]', 'template name or URL from https://aframe.io/templates')
+  .on('--help', () => {
+    require('./lib/init-template.js').printBanner('aframe new --template');
+  })
+  .action(commands.new);
+
+program
   .command('serve [path] [options]')
   .alias('s')
   .description('Serve an A-Frame project in path (default: current directory).')
@@ -51,14 +61,15 @@ program
   .action((filePath, options) => commands.build(filePath, options));
 
 program
-  .command('new [path]')
-  .alias('n')
-  .description('Create a new A-Frame project in path.')
-  .option('-t, --template [name]', 'template name or URL from https://aframe.io/templates')
-  .on('--help', () => {
-    require('./lib/init-template.js').printBanner('aframe new --template');
-  })
-  .action(commands.new);
+  .command('deploy [path]')
+  .alias('d')
+  .description('Deploy (to Now) an A-Frame project in path (default: current directory).')
+  .option('-e, --env [setting]', 'specify a set of override settings to apply')
+  .option('-p, --production', 'same as `--env production`')
+  .option('-d, --debug [pattern]', 'print verbose debug output to stdout')
+  .option('-j, --jobs [num]', 'parallelize the build')
+  .option('-c, --config [path]', 'specify a path to Brunch config file')
+  .action((filePath, options) => commands.deploy(filePath, options));
 
 program
   .command('help', null, {isDefault: true})
