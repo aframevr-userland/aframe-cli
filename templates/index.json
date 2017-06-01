@@ -39,7 +39,7 @@
       "technologies": "ES6"
     },
     {
-      "alias": "model-viewer",
+      "alias": "model",
       "url": "aframevr-userland/aframe-model-template",
       "title": "Model Viewer",
       "description": "Model viewer built using A-Frame.",
