@@ -9,3 +9,6 @@ my-*/
 my-aframe-project
 node_modules/
 tmp/
+
+.public/
+public/
