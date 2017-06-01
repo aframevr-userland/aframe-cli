@@ -23,6 +23,14 @@
       "technologies": "ES6"
     },
     {
+      "alias": "primitives",
+      "url": "aframevr-userland/aframe-primitives-template",
+      "title": "Primitives template",
+      "description": "A-Frame scene built from primitives.",
+      "components": {},
+      "technologies": "ES6"
+    },
+    {
       "alias": "room",
       "url": "aframevr-userland/aframe-room-template",
       "title": "Room template",
