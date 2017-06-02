@@ -11,7 +11,10 @@
   <body>
     <a-scene>
       <a-assets>
-        <a-mixin id="hotspot" geometry="primitive: circle; radius: 0.20" material="src: images/arrow.png; shader: flat"></a-mixin>
+        <a-mixin id="hotspot"
+          geometry="primitive: circle; radius: 0.20"
+          material="src: images/arrow.png; shader: flat"
+          sound="src: url(sounds/switch.wav)"></a-mixin>
       </a-assets>
 
       <a-entity teleport position="0 0.01 0" rotation="-90 0 0" mixin="hotspot"></a-entity>
