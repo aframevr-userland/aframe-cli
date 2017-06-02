@@ -12,7 +12,7 @@
   "scripts": {
     "start": "npm run cli",
     "cli": "node index.js",
-    "bump": "git checkout master && git pull && npm version patch && npm publish && git push --tags",
+    "bump": "git checkout master && git pull && npm version patch && npm publish && git push --tags && git push",
     "release": "npm run release-patch",
     "release-patch": "npm version patch",
     "publish-all": "echo 'This is a WIP! Proceed with caution …' && node tools/publish-all.js"
