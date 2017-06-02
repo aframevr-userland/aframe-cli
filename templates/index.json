@@ -45,6 +45,14 @@
       "description": "Model viewer built using A-Frame.",
       "components": {},
       "technologies": "ES6"
+    },
+    {
+      "alias": "gltf-viewer",
+      "url": "aframevr-userland/aframe-gltf-viewer-template",
+      "title": "glTF Viewer",
+      "description": "glTF viewer built using A-Frame.",
+      "components": {},
+      "technologies": "ES6"
     }
   ]
 }

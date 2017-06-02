@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Model viewer • Made with A-Frame</title>
+    <link rel="stylesheet" href="css/app.css">
+    <script src="js/vendor.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <a-mixin id="hotspot"
+          geometry="primitive: circle; radius: 0.20"
+          material="src: images/arrow.png; shader: flat"
+          sound="src: url(sounds/switch.wav)"></a-mixin>
+      </a-assets>
+
+      <a-entity teleport position="0 0.01 0" rotation="-90 0 0" mixin="hotspot"></a-entity>
+      <a-entity teleport position="2 0.01 -2.5" rotation="-90 90 0" mixin="hotspot"></a-entity>
+      <a-entity teleport position="-2 0.01 -2.5" rotation="-90 -90 0" mixin="hotspot"></a-entity>
+      <a-entity teleport position="0 0.01 -5" rotation="-90 180 0" mixin="hotspot"></a-entity>
+
+      <a-entity position="0 0 -2.5" gltf-model="src: url(models/rocky.gltf)"></a-entity>
+
+      <a-entity geometry="primitive: circle; radius: 40" rotation="-90 0 0" material="src: images/grid.png; repeat: 160 160;" ></a-entity>
+      <a-sky src="images/sky.png"></a-sky>
+
+      <a-camera>
+        <a-entity raycaster="objects: [teleport]" cursor
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: black; shader: flat" position="0 0 -2"></a-entity>
+      <a-camera>
+    </a-scene>
+  </body>
+</html>
