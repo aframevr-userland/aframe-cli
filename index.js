@@ -56,7 +56,11 @@ program
   .description('Create a new A-Frame project in path.')
   .option('-t, --template [name]', 'template name or URL from https://aframe.io/templates')
   .option('-g, --git [name]', 'create a local Git repository')
+  .option('-s, --slug [name]', 'name/slug of project; must be lowercased and contain no spaces (e.g., `my-aframe-project`)')
   .option('--github [name]', 'create a local Git repository and create a new repository on GitHub')
+  .option('--no-github-commit', "Don't create an initial Git commit and push to GitHub repository")
+  .option('--no-github-open', "Don't open browser window to load GitHub repository project page")
+  .option('--no-open', "Don't change directories to path of newly created project")
   .on('--help', () => {
     require('./lib/init-template.js').printBanner('aframe new --template');
   })

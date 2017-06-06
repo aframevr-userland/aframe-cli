@@ -35,7 +35,7 @@ module.exports = (rootPath, options) => {
     debug
   }).catch(err => {
     console.log();
-    console.error(`  ${chalk.black.bgRed('Encountered error:')}${(err.message ? ` ${chalk.red(err.message)}` : '')}`);
+    console.error(`  ${chalk.black.bgRed('Encountered error:')}${(err.message ? ` ${chalk.red(err.message)}${chalk.reset()}` : '')}`);
     if (err.stack) {
       console.error(err);
     }
