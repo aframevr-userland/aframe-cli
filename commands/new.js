@@ -1,5 +1,6 @@
 const path = require('path');
 
+const chalk = require('chalk');
 const logger = require('loggy');
 
 const checkLegacyNewSyntax = options => {
@@ -21,9 +22,32 @@ module.exports = (rootPath, options) => {
 
   rootPath = rootPath || options.parent.args[0];
 
+  const git = options.git;
+  const github = options.github;
+  const debug = options.debug;
+
   return initTemplate(template, {
     logger,
     rootPath,
-    commandName: 'aframe new'
+    commandName: 'aframe new',
+    git,
+    github,
+    debug
+  }).catch(err => {
+    console.log();
+    console.error(`  ${chalk.black.bgRed('Encountered error:')}${(err.message ? ` ${chalk.red(err.message)}` : '')}`);
+    if (err.stack) {
+      console.error(err);
+    }
+    if (err && err.message && Array.isArray(err.errors) && err.errors.length) {
+      console.log();
+      err.errors.forEach(error => {
+        if (!error.message) {
+          return;
+        }
+        console.log(`${chalk.dim('  - ')}${error.message}`);
+      });
+      console.log();
+    }
   });
 };

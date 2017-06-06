@@ -55,6 +55,8 @@ program
   .alias('n')
   .description('Create a new A-Frame project in path.')
   .option('-t, --template [name]', 'template name or URL from https://aframe.io/templates')
+  .option('-g, --git [name]', 'create a local Git repository')
+  .option('--github [name]', 'create a local Git repository and create a new repository on GitHub')
   .on('--help', () => {
     require('./lib/init-template.js').printBanner('aframe new --template');
   })
