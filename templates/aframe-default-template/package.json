@@ -9,14 +9,12 @@
     "start": "npm run serve",
     "serve": "aframe serve",
     "build": "aframe build",
-    "status": "oao status",
-    "deploy": "gh-pages -d .public"
+    "deploy": "aframe deploy"
   },
   "dependencies": {
     "aframe": "github:aframevr/aframe#52087a8"
   },
   "devDependencies": {
-    "aframe-cli": "0.5.7",
-    "gh-pages": "^1.0.0"
+    "aframe-cli": "0.5.7"
   }
 }

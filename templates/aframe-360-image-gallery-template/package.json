@@ -9,13 +9,7 @@
     "start": "npm run serve",
     "serve": "aframe serve",
     "build": "aframe build",
-    "bootstrap": "oao bootstrap",
-    "status": "oao status",
-    "component-add": "oao add .",
-    "component-remove": "oao remove .",
-    "component-upgrade": "oao upgrade .",
-    "component-outdated": "oao outdated",
-    "deploy": "gh-pages -d .public"
+    "deploy": "aframe deploy"
   },
   "dependencies": {
     "aframe": "github:aframevr/aframe#52087a8",
@@ -25,8 +19,6 @@
     "aframe-template-component": "^3.2.1"
   },
   "devDependencies": {
-    "aframe-cli": "0.1.1",
-    "gh-pages": "^1.0.0",
-    "oao": "^0.8.2"
+    "aframe-cli": "0.1.1"
   }
 }

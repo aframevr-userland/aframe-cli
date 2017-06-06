@@ -25,6 +25,53 @@ program
   .usage('[command] [options]');
 
 program
+  .command('deploy [provider] [path]')
+  .alias('d')
+  .description('Deploy an A-Frame project in path.')
+  .action(function (provider, path, arg3) {
+    console.log('provider', provider);
+    console.log('pat', path);
+    console.log('arg3', arg3);
+    // const deploy = commands.deploy(provider)(filePath, options);
+  })
+  .on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log(`    ${chalk.cyan('aframe')} ${chalk.magenta('deploy')} ghpages`);
+    console.log();
+
+    const error = new Error(`
+Please specify the provider/host to which you want to deploy your project:
+
+  ${chalk.cyan('aframe')} ${chalk.magenta('deploy')} ${chalk.green.bold('<provider>')}
+
+For example, for ${chalk.bold('GitHub Pages')} ${chalk.dim.underline('(https://pages.github.com/)')}:
+
+  ${chalk.cyan('aframe')} ${chalk.magenta('deploy')} ${chalk.green('ghpages')}
+
+The project at the path should specify the template (boilerplate) from which your new
+A-Frame scene will be initialized. Pass a template name or URL like so:
+
+  ${commandStr} ${chalk.green('my-project-directory')} --template ${chalk.underline('default')}
+  ${commandStr} ${chalk.green('my-project-directory')} --template ${chalk.underline('aframe-default-template')}
+  ${commandStr} ${chalk.green('my-project-directory')} --template ${chalk.underline('https://github.com/aframevr-userland/aframe-default-template')}
+  ${commandStr} ${chalk.green('my-project-directory')} --template ${chalk.underline('aframevr-userland/aframe-default-template')}
+
+  Run ${chalk.cyan('aframe')} ${chalk.magenta('--help')} to see all options.
+  `);
+
+    error.code = 'PROVIDER_MISSING';
+
+    console.log(error.message.replace(/\n/g, '\n  '));
+
+    // process.exit();
+  });
+
+  // .option('-g, --gh-pages [repo]', 'build and deploy a project to GitHub Pages; ' +
+  //   '`repo` defaults to `origin` remote URL, but can be overridden ' +
+  //   '(e.g., `https://github.com/example/project.git`)')
+
+program
   .command('serve [path] [options]')
   .alias('s')
   .description('Serve an A-Frame project in path (default: current directory).')
