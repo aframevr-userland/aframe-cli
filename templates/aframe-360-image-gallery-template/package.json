@@ -18,7 +18,7 @@
     "deploy": "gh-pages -d .public"
   },
   "dependencies": {
-    "aframe": "^0.5.0",
+    "aframe": "github:aframevr/aframe#52087a8",
     "aframe-animation-component": "^3.2.5",
     "aframe-event-set-component": "^3.0.3",
     "aframe-layout-component": "^4.1.0",
