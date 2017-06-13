@@ -12,7 +12,7 @@
     "deploy": "gh-pages -d .public"
   },
   "dependencies": {
-    "aframe": "github:aframevr/aframe#52087a8"
+    "aframe": "github:aframevr/aframe#6f9a42c"
   },
   "devDependencies": {
     "aframe-cli": "0.5.7",
