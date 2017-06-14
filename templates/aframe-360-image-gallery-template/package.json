@@ -8,25 +8,16 @@
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
-    "build": "aframe build",
-    "bootstrap": "oao bootstrap",
-    "status": "oao status",
-    "component-add": "oao add .",
-    "component-remove": "oao remove .",
-    "component-upgrade": "oao upgrade .",
-    "component-outdated": "oao outdated",
-    "deploy": "gh-pages -d .public"
+    "build": "aframe build"
   },
   "dependencies": {
-    "aframe": "github:aframevr/aframe#6f9a42c",
+    "aframe": "git@github.com:aframevr/aframe.git#95754b3",
     "aframe-animation-component": "^3.2.5",
     "aframe-event-set-component": "^3.0.3",
     "aframe-layout-component": "^4.1.0",
     "aframe-template-component": "^3.2.1"
   },
   "devDependencies": {
-    "aframe-cli": "0.1.1",
-    "gh-pages": "^1.0.0",
-    "oao": "^0.8.2"
+    "aframe-cli": "0.5.16"
   }
 }
