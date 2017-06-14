@@ -12,10 +12,9 @@
   "scripts": {
     "start": "npm run cli",
     "cli": "node index.js",
-    "bump": "git checkout master && git pull && npm version patch && npm publish && git push --tags && git push",
-    "release": "npm run release-patch",
-    "release-patch": "npm version patch",
-    "publish-all": "echo 'This is a WIP! Proceed with caution …' && node tools/publish-all.js"
+    "templates-bootstrap": "lerna bootstrap",
+    "tb": "npm run templates-bootstrap",
+    "release": "lerna publish"
   },
   "dependencies": {
     "auto-reload-brunch": "^2",
@@ -28,11 +27,9 @@
     "commander": "^2.9.0",
     "fs-extra": "^3.0.1",
     "loggy": "^1.0.2",
-    "oao": "^0.8.2",
     "uglify-js-brunch": "^2"
   },
   "devDependencies": {
-    "graph-data-structure": "^0.8.0",
-    "semver": "^5.3.0"
+    "lerna": "^2.0.0-rc.5"
   }
 }

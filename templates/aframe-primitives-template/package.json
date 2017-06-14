@@ -2,20 +2,18 @@
   "name": "aframe-primitives-template",
   "description": "A-Frame scene built from primitives.",
   "author": "A-Frame authors",
-  "version": "0.1.1",
+  "version": "0.5.17",
   "license": "CC0-1.0",
   "repository": "aframevr-userland/aframe-primitives-template",
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
-    "status": "oao status",
-    "deploy": "gh-pages -d .public"
+    "build": "aframe build"
   },
   "dependencies": {
-    "aframe": "github:aframevr/aframe#52087a8"
+    "aframe": "git@github.com:aframevr/aframe.git#95754b3"
   },
   "devDependencies": {
-    "aframe-cli": "0.5.7",
-    "gh-pages": "^1.0.0"
+    "aframe-cli": "0.5.7"
   }
 }
