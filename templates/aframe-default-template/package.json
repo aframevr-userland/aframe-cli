@@ -2,7 +2,7 @@
   "name": "aframe-default-template",
   "description": "A WebVR scene. Made with A-Frame, a WebVR framework.",
   "author": "A-Frame authors",
-  "version": "0.1.1",
+  "version": "0.5.17",
   "license": "CC0-1.0",
   "repository": "aframevr-userland/aframe-default-template",
   "scripts": {
