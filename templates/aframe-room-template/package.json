@@ -2,7 +2,7 @@
   "name": "aframe-room-template",
   "description": "Room built using A-Frame.",
   "author": "A-Frame authors",
-  "version": "0.5.17",
+  "version": "0.5.18",
   "license": "CC0-1.0",
   "repository": "aframevr-userland/aframe-room-template",
   "scripts": {
