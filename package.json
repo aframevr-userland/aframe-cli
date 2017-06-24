@@ -28,6 +28,7 @@
     "fs-extra": "^3.0.1",
     "loggy": "^1.0.2",
     "opn": "^5.1.0",
+    "picture-tube": "^1.0.0",
     "uglify-js-brunch": "^2.10.0"
   },
   "devDependencies": {

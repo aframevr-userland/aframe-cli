@@ -18,7 +18,7 @@ const program = require('commander');
 const commands = require('./commands/index.js');
 const pkg = require('./package.json');
 
-const displayHelp = () => program.help(colorizeHelp);  // This calls `process.exit()`.
+const displayHelp = () => program.outputHelp(colorizeHelp);
 
 program
   .version(pkg.version, '-v, --version', 'output the version number')
@@ -87,30 +87,61 @@ const colorizeHelp = txt => {
   // TODO: Figure out how to get `commander` to colorize command help
   // (i.e., the `Usage:` section).
   return txt
-    .replace('Usage:  ', `Usage: ${programName} `)
-    .replace(new RegExp(`${programName} `, 'g'), `${chalk.cyan(programName)} `)
+    .replace('Usage:  ', `${programName} `)
+    .replace(new RegExp(`${programName} `, 'g'), `${chalk.bold.cyan(programName)} `)
     .replace(/\[command\] /g, `${chalk.magenta('[command]')} `);
 };
 
-if (args.length < 3 || (args.length < 4 && helpFlag)) {
-  displayHelp();
-}
+function init () {
+  // User ran command `aframe`.
+  if (args.length < 3) {
+    if (!helpFlag) {
 
-if (help && validCommand) {
-  console.log();
-  console.error(`  ${chalk.black.bgGreen('Command:')} ${chalk.cyan(programName)} ${chalk.magenta(command)}`);
-}
+      const pictureTube = require('picture-tube');
+      fs.createReadStream(
+        path.join(__dirname, 'assets', 'img', 'aframe-logo.png')
+      )
+        .pipe(pictureTube({cols: 64}))
+        .pipe(process.stdout);
 
-program.parse(args);
+      process.on('exit', function () {
+        process.stdout.write('\n');
+        displayHelp();
+      });
 
-if (!validCommand) {
-  if (showInvalidMessage) {
-    console.log();
-    console.error(`  ${chalk.black.bgRed('Invalid command:')} ${chalk.cyan(programName)} ${chalk.magenta(command)}`);
+      return;
+    }
+
+    displayHelp();
+    process.exit();
   }
-  displayHelp();
+
+  // User ran command `aframe <command> --help`.
+  if (args.length < 4 && helpFlag) {
+    displayHelp();
+    process.exit(0);
+  }
+
+  if (help && validCommand) {
+    console.log();
+    console.error(`  ${chalk.black.bgGreen('Command:')} ${chalk.bold.cyan(programName)} ${chalk.magenta(command)}`);
+  }
+
+  program.parse(args);
+
+  if (!validCommand) {
+    if (showInvalidMessage) {
+      console.log();
+      console.error(`  ${chalk.black.bgRed('Invalid command:')} ${chalk.cyan(programName)} ${chalk.magenta(command)}`);
+    }
+    displayHelp();
+    process.exit(1);
+  }
 }
 
+init();
+
+module.exports.init = init;
 module.exports.displayHelp = displayHelp;
 module.exports.program = program;
 module.exports.programName = programName;
