@@ -25,6 +25,14 @@ program
   .usage('[command] [options]');
 
 program
+  .command('deploy [path]')
+  .alias('d')
+  .description('Deploy (to a static CDN) an A-Frame project in path (default: current directory).')
+  .option('-p, --production', 'same as `--env production`')
+  .option('-c, --config [path]', 'specify a path to Brunch config file')
+  .action((filePath, options) => commands.deploy(filePath, options));
+
+program
   .command('serve [path] [options]')
   .alias('s')
   .description('Serve an A-Frame project in path (default: current directory).')
@@ -101,7 +109,7 @@ function init () {
       fs.createReadStream(
         path.join(__dirname, 'assets', 'img', 'aframe-logo.png')
       )
-        .pipe(pictureTube({cols: 64}))
+        .pipe(pictureTube({cols: 46}))
         .pipe(process.stdout);
 
       process.on('exit', function () {
