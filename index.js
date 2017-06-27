@@ -30,6 +30,10 @@ program
   .version(pkg.version, '-v, --version', 'output the version number')
   .usage('[command] [options]');
 
+if (process.argv[2] === 'publish' || process.argv[2] === 'push') {
+  process.argv[2] = 'deploy';
+}
+
 program
   .command('deploy [path]')
   .alias('d')
