@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>360&deg; Tour</title>
+    <link rel="stylesheet" href="css/bundle.css">
+    <script src="js/vendor.js"></script>
+    <script src="js/bundle.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <a-mixin id="hotspot-text" text="font: exo2bold; width: 5" geometry="primitive: plane; width: 1.6; height: 0.4" material="color: black;" position="0 -0.6 0"></a-mixin>
+        <a-mixin id="hotspot-target" geometry="primitive: octahedron; radius: 0.2;" material="flatShading: true; color: rgb(255, 0, 161)"></a-mixin>
+      </a-assets>
+
+      <a-tour>
+        <a-panorama id="livingroom" src="images/livingroom.jpg" rotation="0 90 0"></a-panorama>
+        <a-panorama id="kitchen" src="images/kitchen.jpg" rotation="0 -90 0"></a-panorama>
+
+        <a-hotspot for="livingroom" to="kitchen" mixin="hotspot-target" position="5 0 0" rotation="0 -90 0">
+          <a-text value="KITCHEN" align="center" mixin="hotspot-text"></a-text>
+        </a-hotspot>
+        <a-hotspot for="kitchen" to="livingroom" mixin="hotspot-target" position="2 0 5" rotation="0 180 0">
+          <a-text value="LIVING ROOM" align="center" mixin="hotspot-text"></a-text>
+        </a-hotspot>
+      </a-tour>
+
+      <a-entity camera look-controls>
+        <a-entity cursor position="0 0 -1"
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: black; shader: flat">
+        </a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
