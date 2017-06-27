@@ -30,7 +30,7 @@ program
   .description('Deploy (to a static CDN) an A-Frame project in path (default: current directory).')
   .option('-p, --production', 'same as `--env production`')
   .option('-c, --config [path]', 'specify a path to Brunch config file')
-  .option('-t, --timeout [timeout]', 'timeout (in milliseconds) for connecting/disconnecting to CDN (default: `3000`)', parseFloat, 3000)
+  .option('-t, --timeout [timeout]', 'timeout (in milliseconds) for connecting/disconnecting to CDN (default: `5000`)', parseFloat, 5000)
   .action((filePath, options) => commands.deploy(filePath, options));
 
 program
