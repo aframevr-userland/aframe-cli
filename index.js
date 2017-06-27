@@ -42,6 +42,9 @@ program
   .option('-c, --config [path]', 'specify a path to Brunch config file')
   .option('-t, --timeout [timeout]', 'timeout (in milliseconds) for connecting to CDN (default: `5000`)', parseFloat, 5000)
   .option('-d, --disconnect-timeout [timeout]', 'timeout (in milliseconds) for disconnecting to CDN (default: `10000`)', parseFloat, 10000)
+  .option('--no-open', 'do not automatically open browser window')
+  .option('--no-clipboard', 'do not automatically add deployed URL to clipboard')
+  .option('--no-submit', 'do not submit site to the A-Frame Index')
   .action((filePath, options) => {
     displayLogo();
     setTimeout(() => {
@@ -64,6 +67,7 @@ program
   .option('-c, --config [path]', 'specify a path to Brunch config file')
   .option('--stdin', 'listen to stdin and exit when stdin closes')
   .option('--no-open', 'do not automatically open browser window')
+  .option('--no-clipboard', 'do not automatically add served URL to clipboard')
   .action((watchPath, options) => {
     displayLogo();
     setTimeout(() => {
