@@ -59,7 +59,13 @@ program
   .option('-c, --config [path]', 'specify a path to Brunch config file')
   .option('--stdin', 'listen to stdin and exit when stdin closes')
   .option('--no-open', 'do not automatically open browser window')
-  .action((watchPath, options) => commands.serve(watchPath, options));
+  .action((watchPath, options) => {
+    displayLogo();
+    setTimeout(() => {
+      process.stdout.write('\n');
+      commands.serve(watchPath, options);
+    }, 150);
+  });
 
 program
   .command('build [path]')
