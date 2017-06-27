@@ -45,6 +45,14 @@
       "description": "Model viewer built using A-Frame.",
       "components": {},
       "technologies": "ES6"
+    },
+    {
+      "alias": "360-tour",
+      "url": "aframevr-userland/aframe-360-tour-template",
+      "title": "360 tour template",
+      "description": "360 tour built using A-Frame.",
+      "components": {},
+      "technologies": "ES6"
     }
   ]
 }
