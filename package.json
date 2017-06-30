@@ -32,6 +32,8 @@
     "loggy": "^1.0.2",
     "opn": "^5.1.0",
     "picture-tube": "^1.0.0",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4",
     "uglify-js-brunch": "^2.10.0"
   },
   "devDependencies": {
