@@ -54,6 +54,22 @@ program
   });
 
 program
+  .command('submit [url]')
+  .alias('i')
+  .description('Submit site URL (of an A-Frame project) to the A-Frame Index.')
+  .option('-t, --timeout [timeout]', 'timeout (in milliseconds) for submitting to A-Frame Index API (default: `5000`)', parseFloat, 5000)
+  .option('--no-open', 'do not automatically open browser window')
+  .option('--no-clipboard', 'do not automatically add deployed URL to clipboard')
+  .option('--no-submit', 'do not submit site to the A-Frame Index')
+  .action((siteUrl, options) => {
+    displayLogo();
+    setTimeout(() => {
+      process.stdout.write('\n');
+      commands.submit(siteUrl, options);
+    }, 150);
+  });
+
+program
   .command('serve [path] [options]')
   .alias('s')
   .description('Serve an A-Frame project in path (default: current directory).')
