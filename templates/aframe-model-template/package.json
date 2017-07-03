@@ -11,7 +11,7 @@
     "build": "aframe build"
   },
   "dependencies": {
-    "aframe": "git@github.com:aframevr/aframe.git#95754b3",
+    "aframe": "^0.6.0",
     "webrtcsupport": "^2.2.0"
   },
   "devDependencies": {
