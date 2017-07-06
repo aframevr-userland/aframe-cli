@@ -11,7 +11,8 @@ AFRAME.registerPrimitive('a-hotspot', {
 AFRAME.registerComponent('hotspot', {
   schema: {
     for: { type: 'string' },
-    to: { type: 'string' }
+    to: { type: 'string' },
+    positioning: { type: 'boolean', default: false }
   },
 
   init: function () {
@@ -20,6 +21,7 @@ AFRAME.registerComponent('hotspot', {
   },
 
   handleClick: function () {
+    if (this.data.positioning) return;
     var tour = this.tour.components['tour'];
     tour.loadSceneId(this.data.to);
   }
