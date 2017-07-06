@@ -62,10 +62,6 @@ AFRAME.registerComponent('hotspot-helper', {
     this.targetObject.position.z = -distance;
   },
 
-  roundTo: function(num, x) {
-    return +(Math.round(num + 'e+' + x)  + 'e-' + x);
-  },
-
   copyCordinates: function () {
     var selection = window.getSelection();
     var range = document.createRange();
@@ -87,7 +83,7 @@ AFRAME.registerComponent('hotspot-helper', {
     var rotation = this.camera.object3D.getWorldRotation();
     this.dolly.rotation.copy(rotation);
     var position = this.targetObject.getWorldPosition();
-    var cords = this.roundTo(position.x, 3) + ' ' + this.roundTo(position.y, 3) + ' ' + this.roundTo(position.z, 3);
+    var cords = position.x.toFixed(2) + ' ' + position.y.toFixed(2) + ' ' + position.z.toFixed(2);
     var target = this.data.target;
     if (target) {
       target.setAttribute('position', { x: position.x, y: position.y, z: position.z });
