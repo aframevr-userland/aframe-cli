@@ -12,8 +12,10 @@ process.on('SIGTERM', () => {
 const path = require('path');
 
 const chalk = require('chalk');
+const commandLineArgs = require('command-line-args');
+const commandLineCommands = require('command-line-commands');
+const commandLineUsage = require('command-line-usage');
 const fs = require('fs-extra');
-const program = require('commander');
 
 const commands = require('./commands/index.js');
 const pkg = require('./package.json');
@@ -96,15 +98,24 @@ program
   .option('-j, --jobs [num]', 'parallelize the build')
   .option('-c, --config [path]', 'specify a path to Brunch config file')
   .option('--stdin', 'listen to stdin and exit when stdin closes')
-  .option('--no-open', 'do not automatically open browser window')
+  .option('--not-open', 'do not automatically open browser window', Boolean, true)
   .option('--no-clipboard', 'do not automatically add served URL to clipboard')
-  .action((watchPath, options) => {
+  .action(function (watchPath, options) {
+    if (arguments.length)
+    console.log('options', options);
+    console.log('arguments', arguments);
+
     displayLogo();
+
     setTimeout(() => {
       process.stdout.write('\n');
       commands.serve(watchPath, options);
     }, 150);
   });
+
+if (process.argv.length <= 3) {
+  process.argv.splice(2,
+}
 
 program
   .command('build [path]')
