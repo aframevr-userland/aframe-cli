@@ -8,7 +8,7 @@ AFRAME.registerComponent('hotspot-helper', {
 
   init: function () {
     var self = this;
-    this.camera = document.querySelector('a-entity[camera]');
+    this.camera = document.querySelector('[camera]');
 
     // Helper UI
     var uiContainer = this.makeUi();
@@ -31,6 +31,11 @@ AFRAME.registerComponent('hotspot-helper', {
 
     // mousewheel distance
     document.body.addEventListener('mousewheel', this.handleMouseWheel.bind(this));
+
+    // lookat
+    var lookToggle = uiContainer.querySelector('#hh-lookat');
+    lookToggle.addEventListener('change', this.handleLookToggle.bind(this));
+    this.lookToggle = lookToggle;
 
     // reference mesh for position.
     var object = new THREE.Object3D();
@@ -107,7 +112,7 @@ AFRAME.registerComponent('hotspot-helper', {
       </section>
 
       <section>
-        <input id="lookat" type="checkbox"/> Look at origin
+        <input id="hh-lookat" type="checkbox"/> Look at origin
       </section>
 
       <section>
@@ -138,6 +143,19 @@ AFRAME.registerComponent('hotspot-helper', {
     if (value < 0) value = 0;
     input.value = value;
     this.updateDistance(value);
+  },
+
+  handleLookToggle: function (e) {
+    var toggle = this.lookToggle;
+    var checked = toggle.checked;
+    var target = this.data.target;
+    if (target) {
+      if (checked) {
+        target.setAttribute('look-at', '[camera]');
+      } else {
+        target.removeAttribute('look-at');
+      }
+    }
   },
 
   tick: function () {

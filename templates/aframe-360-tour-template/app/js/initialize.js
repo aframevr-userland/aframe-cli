@@ -1,3 +1,4 @@
+require('aframe-look-at-component');
 require('./components/tour');
 require('./components/panorama');
 require('./components/hotspot');
