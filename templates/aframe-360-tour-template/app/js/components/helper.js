@@ -10,33 +10,27 @@ AFRAME.registerComponent('hotspot-helper', {
     var self = this;
     this.camera = document.querySelector('a-entity[camera]');
 
-    var uiContainer = document.createElement('div');
-    uiContainer.style.cssText = 'position: absolute; top: 0; left: 0; padding: 10px; background: black; color: white; font-family: Helvetica, Arial, Sans-Serif';
+    // Helper UI
+    var uiContainer = this.makeUi();
     document.body.appendChild(uiContainer);
 
-    var distanceInput = document.createElement('input');
-    distanceInput.type = "text";
-    distanceInput.size = 4;
-    distanceInput.value = this.data.distance;
-    this.distanceInput = distanceInput;
+    // coordinates
+    this.out = uiContainer.querySelector('#hh-coordinates');
+
+    // copy coordinates to clipboard
+    var copyButton = uiContainer.querySelector('#hh-copy');
+    copyButton.addEventListener('click', this.copyCordinates.bind(this));
+
+    // set distance
+    var distanceInput = uiContainer.querySelector('#hh-distance');
     distanceInput.addEventListener('input', function () {
       self.updateDistance(this.value);
     });
-    uiContainer.appendChild(distanceInput);
+    distanceInput.value = this.data.distance;
+    this.distanceInput = distanceInput;
 
     // mousewheel distance
     document.body.addEventListener('mousewheel', this.handleMouseWheel.bind(this));
-
-    // coordinates
-    var outEl = document.createElement('div');
-    uiContainer.appendChild(outEl);
-    this.out = outEl;
-
-    // copy coordinates into clipboard
-    var copyEl = document.createElement('button');
-    copyEl.innerHTML = 'copy';
-    uiContainer.appendChild(copyEl);
-    copyEl.addEventListener('click', this.copyCordinates.bind(this));
 
     // reference mesh for position.
     var object = new THREE.Object3D();
@@ -58,25 +52,92 @@ AFRAME.registerComponent('hotspot-helper', {
     }
   },
 
+  makeUi: function () {
+    var uiContainer = document.createElement('div');
+    var markup = `
+    <style>
+    #hh {
+      position: absolute;
+      top: 0; left: 0;
+      padding: 10px;
+      margin: 10px;
+      background: #333333;
+      color: white;
+      font-family: Helvetica, Arial, Sans-Serif;
+    }
+
+    #hh h1 {
+      margin: 0;
+    }
+
+    #hh section {
+      margin: 20px 0 20px 0;
+    }
+
+    #hh .hh-tip {
+      display: block;
+      font-size: 0.75rem;
+      color: rgb(148, 148, 148);
+    }
+
+    #hh input[type="text"] {
+      border: none;
+      background: rgb(108, 108, 108);
+      color: white;
+      padding: 5px;
+    }
+
+    #hh input[type="button"] {
+      background: white;
+      padding: 5px;
+      border: none;
+    }
+
+    #hh input[type="button"]:active {
+      background: rgb(47, 77, 135);
+      color: white;
+    }
+    </style>
+    <div id="hh">
+      <h1>Hotspot-helper</h1>
+
+      <section>
+        <input id="hh-distance" size="5" type="text"></input> Hotspot distance
+        <span class="hh-tip">Use mouse scroll to adjust distance</span>
+      </section>
+
+      <section>
+        <input id="lookat" type="checkbox"/> Look at origin
+      </section>
+
+      <section>
+        <input id="hh-coordinates" size="20" type="text" value="1.000 1.000 1.000"/>
+        <input id="hh-copy" type="button" value="Copy to Clipboard"/>
+      </section>
+    </div>
+    `
+    uiContainer.innerHTML = markup;
+    return uiContainer;
+  },
+
   updateDistance: function (distance) {
     this.targetObject.position.z = -distance;
   },
 
   copyCordinates: function () {
-    var selection = window.getSelection();
-    var range = document.createRange();
-    range.selectNodeContents(this.out);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    this.out.select();
     document.execCommand('copy');
+    getSelection().removeAllRanges();
   },
 
   handleMouseWheel: function (e) {
     var input = this.distanceInput;
     var data = this.data;
     var increment = e.deltaY < 0 ? data.distanceIncrement : -data.distanceIncrement;
-    input.value = parseFloat(input.value) + increment;
-    this.updateDistance(input.value);
+    var value = parseFloat(input.value) + increment;
+    if (value < 0) value = 0;
+    input.value = value;
+    this.updateDistance(value);
   },
 
   tick: function () {
@@ -88,6 +149,6 @@ AFRAME.registerComponent('hotspot-helper', {
     if (target) {
       target.setAttribute('position', { x: position.x, y: position.y, z: position.z });
     }
-    this.out.innerHTML = cords;
+    this.out.value = cords;
   }
 });
