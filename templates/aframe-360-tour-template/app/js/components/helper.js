@@ -13,10 +13,17 @@ AFRAME.registerComponent('hotspot-helper', {
     var self = this;
     this.camera = document.querySelector('[camera]');
     this.targetRotationOrigin = this.data.target.getAttribute('rotation');
+    this.targetPositionOrigin = this.data.target.getAttribute('position');
 
     // Helper UI
     var uiContainer = this.makeUi();
     document.body.appendChild(uiContainer);
+
+    // enabled
+    this.enabled = uiContainer.querySelector('#hh-enabled');
+    this.enabled.addEventListener('click', function () {
+      uiContainer.dataset.enabled = self.enabled.checked ? true : false;
+    });
 
     // set distance
     this.distanceInput = distanceInput = uiContainer.querySelector('#hh-distance');
@@ -62,6 +69,7 @@ AFRAME.registerComponent('hotspot-helper', {
 
   makeUi: function () {
     var uiContainer = document.createElement('div');
+    uiContainer.id = 'hh';
     var markup = `
     <style>
     #hh {
@@ -78,14 +86,30 @@ AFRAME.registerComponent('hotspot-helper', {
       margin: 0;
     }
 
+    #hh h2 {
+      margin: 10px 0 10px 0;
+      font-weight: 200;
+    }
+
+    #hh[data-enabled="false"] section {
+      display: none;
+    }
+
     #hh section {
       margin: 20px 0 20px 0;
+    }
+
+    #hh .hh-check {
+      display: block;
+      font-size: 0.75rem;
+      margin: 8px 0 8px 0;
     }
 
     #hh .hh-tip {
       display: block;
       font-size: 0.75rem;
       color: rgb(148, 148, 148);
+      margin: 8px 0 8px 0;
     }
 
     #hh input[type="text"] {
@@ -106,28 +130,32 @@ AFRAME.registerComponent('hotspot-helper', {
       color: white;
     }
     </style>
-    <div id="hh">
-      <h1>Hotspot-helper</h1>
 
-      <section>
-        <input id="hh-distance" size="5" type="text"></input> Hotspot distance
-        <span class="hh-tip">Use mouse scroll to adjust distance</span>
-      </section>
+    <h1>Hotspot-helper</h1>
 
-      <section>
-        Position<br/>
-        <input id="hh-position" size="20" type="text" value="1.000 1.000 1.000"/>
-        <input id="hh-copy-position" type="button" value="Copy to Position"/>
-      </section>
+    <span class="hh-check">
+      <input id="hh-enabled" type="checkbox" checked/> Enabled
+    </span>
 
-      <section>
-        Rotation<br/>
-        <input id="hh-rotation" size="20" type="text" value="1.000 1.000 1.000"/>
-        <input id="hh-copy-rotation" type="button" value="Copy to Rotation"/>
-        <br/>
+    <section>
+      <input id="hh-distance" size="5" type="text"></input> Hotspot distance
+      <span class="hh-tip">Use mouse scroll to adjust distance</span>
+    </section>
+
+    <section>
+      <h2>Position</h2>
+      <input id="hh-position" size="20" type="text" value="1.000 1.000 1.000"/>
+      <input id="hh-copy-position" type="button" value="Copy to Position"/>
+    </section>
+
+    <section>
+      <h2>Rotation</h2>
+      <input id="hh-rotation" size="20" type="text" value="1.000 1.000 1.000"/>
+      <input id="hh-copy-rotation" type="button" value="Copy to Rotation"/>
+      <span class="hh-check">
         <input id="hh-lookat" type="checkbox"/> Look at origin
-      </section>
-    </div>
+      </span>
+    </section>
     `
     uiContainer.innerHTML = markup;
     return uiContainer;
@@ -177,12 +205,17 @@ AFRAME.registerComponent('hotspot-helper', {
   tick: function () {
     var target = this.data.target;
     if (!target) return;
-    var rotation = this.camera.object3D.getWorldRotation();
-    this.dolly.rotation.copy(rotation);
-    var position = this.targetObject.getWorldPosition();
-    var cords = position.x.toFixed(2) + ' ' + position.y.toFixed(2) + ' ' + position.z.toFixed(2);
-    target.setAttribute('position', { x: position.x, y: position.y, z: position.z });
-    this.position.value = cords;
-    this.updateRotation();
+    if (this.enabled.checked) {
+      var rotation = this.camera.object3D.getWorldRotation();
+      this.dolly.rotation.copy(rotation);
+      var position = this.targetObject.getWorldPosition();
+      var cords = position.x.toFixed(2) + ' ' + position.y.toFixed(2) + ' ' + position.z.toFixed(2);
+      target.setAttribute('position', { x: position.x, y: position.y, z: position.z });
+      this.position.value = cords;
+      this.updateRotation();
+    } else {
+      target.setAttribute('position', this.targetPositionOrigin);
+      target.setAttribute('rotation', this.targetRotationOrigin);
+    }
   }
 });
