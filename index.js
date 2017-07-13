@@ -141,12 +141,20 @@ function displayHelp () {
         header: 'Examples',
         content: [
           {
-            desc: bullet('Create a new A-Frame scene at a URL.'),
+            desc: bullet('Create a new A-Frame scene.'),
+            example: `$ ${binStr} [magenta]{create}`,
+          },
+          {
+            desc: bullet('Create a new empty scene.'),
             example: `$ ${binStr} [magenta]{create} default`,
           },
           {
-            desc: bullet('Create a new A-Frame "Model Viewer" scene at a path.'),
+            desc: bullet('Create a "Model Viewer" scene at a path.'),
             example: `$ ${binStr} [magenta]{create} model path/to/my/project/`,
+          },
+          {
+            desc: bullet('Create a scene based on a template on GitHub.'),
+            example: `$ ${binStr} [magenta]{create} cvan/aframe-polar-template`,
           },
           // {
           //   desc: bullet('Serve a local development server to preview an A-Frame scene in your browser.'),
@@ -189,7 +197,7 @@ function create () {
   let templateName = templateNameDefault;
 
   if (template && typeof template === 'string') {
-    // If template name is provided in Git format (e.g., `cvan/aframe-forest-template`).
+    // If template name is provided in Git format (e.g., `cvan/aframe-polar-template`).
     if (template.indexOf('/') === -1 && !template.startsWith('aframe-') && !template.endsWith('-template')) {
       templateName = `aframe-${template.toLowerCase()}-template`;
     } else {
