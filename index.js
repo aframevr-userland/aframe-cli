@@ -88,6 +88,19 @@ function displayHelp () {
   const binStr = `[bold]{[cyan]{${binName}}}`;
 
   let logoContent = '';
+  let bulletCounter = 0;
+
+  let links = [];
+  if (pkgJson.homepage) {
+    links.push({name: 'Project homepage', summary: `[underline]{${pkgJson.homepage}}`});
+  }
+  links.push({name: 'A-Frame examples', summary: `[underline]{https://aframe.io/examples/}`});
+  if (typeof pkgJson.bugs === 'string') {
+    pkgJson.bugs = {url: pkgJson.bugs};
+  }
+  if (pkgJson.bugs && pkgJson.bugs.url) {
+    links.push({name: 'File an issue', summary: `[underline]{${pkgJson.bugs.url}}`});
+  }
 
   return getHeaderLogo().then(content => {
     logoContent = content;
@@ -95,6 +108,10 @@ function displayHelp () {
   }).catch(() => {
     displayUsage();
   });
+
+  function bullet (str) {
+    return `${++bulletCounter}. ${str}`;
+  }
 
   function displayUsage () {
     const sections = [
@@ -124,25 +141,26 @@ function displayHelp () {
         header: 'Examples',
         content: [
           {
-            desc: '1. Create a new A-Frame scene at a URL.',
+            desc: bullet('Create a new A-Frame scene at a URL.'),
             example: `$ ${binStr} [magenta]{create} default`,
           },
           {
-            desc: '2. Create a new A-Frame "Model Viewer" scene at a path.',
+            desc: bullet('Create a new A-Frame "Model Viewer" scene at a path.'),
             example: `$ ${binStr} [magenta]{create} model path/to/my/project/`,
           },
           // {
-          //   desc: '3. Serve a local development server to preview an A-Frame scene in your browser.',
+          //   desc: bullet('Serve a local development server to preview an A-Frame scene in your browser.'),
           //   example: `$ ${binStr} [magenta]{serve}`,
           // },
           // {
-          //   desc: '4. Serve a local development server at a path.',
+          //   desc: bullet('Serve a local development server at a path.'),
           //   example: `$ ${binStr} [magenta]{serve} path/to/my/project/`,
           // }
         ]
       },
       {
-        content: `Project homepage: [underline]{${pkgJson.homepage}}`
+        header: 'Links',
+        content: links
       }
     ];
 

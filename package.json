@@ -12,6 +12,9 @@
   "license": "MIT",
   "repository": "cvan/aframe-cli",
   "homepage": "https://github.com/aframevr-userland/aframe-cli",
+  "bugs": {
+    "url": "https://github.com/aframevr-userland/aframe-cli/issues"
+  },
   "scripts": {
     "start": "npm run cli",
     "cli": "node index.js",
