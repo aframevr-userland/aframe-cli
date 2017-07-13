@@ -155,18 +155,18 @@ function displayHelp () {
 function create () {
   const initSkeleton = require('init-skeleton').init;
 
-  const templatesList = require('../templates/index.json').templates;
+  const templatesList = require('./templates/index.json').templates;
 
   const optionDefinitions = [
     {name: 'template', alias: 't', type: String, defaultOption: true, defaultValue: argv[0] || 'default'},
-    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: argv[1]},
+    {name: 'directory', alias: 'd', type: String, defaultValue: argv[1]},
   ];
   const templateNameDefault = 'aframe-default-template';
 
   const options = commandLineArgs(optionDefinitions, {argv});
 
   const template = options.template;
-  const projectDir = options.directory;
+  let projectDir = options.directory;
 
   let templateName = templateNameDefault;
 
