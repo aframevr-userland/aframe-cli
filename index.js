@@ -20,7 +20,7 @@ const install = require('deps-install');
 const logger = require('loggy');
 
 const commands = require('./commands/index.js');
-const pkg = require('./package.json');
+const pkgJson = require('./package.json');
 const utils = require('./lib/utils.js');
 
 const getBrunchConfigPath = utils.getBrunchConfigPath;
@@ -56,6 +56,74 @@ if (process.argv[2] === 'new') {
 
 const command = parsedCommands.command;
 const argv = parsedCommands.argv;
+
+function displayLogo () {
+  const pictureTube = require('picture-tube');
+  return fs.createReadStream(path.join(__dirname, 'assets', 'img', 'aframe-logo.png'))
+    .pipe(pictureTube({cols: 46}))
+    .pipe(process.stdout);
+};
+
+function displayHelp () {
+  program.outputHelp(colorizeHelp);
+}
+
+function displayVersion () {
+  console.log(pkgJson.version);
+  process.exit();
+}
+
+function displayHelp() {
+  const binName = pkgJson.libraryName || pkgJson.productName || Object.keys(pkgJson.bin)[0];
+  const binStr = `[bold]{[cyan]{${binName}}}`;
+
+  const sections = [
+    {
+      header: binName,
+      content: `${binStr} is a command-line interface for building, managing, and publishing A-Frame scenes.`
+    },
+    {
+      header: 'Usage',
+      content: `$ ${binStr} [magenta]{<command>} [blue]{[options]}`
+    },
+    {
+      header: 'Commands',
+      content: [
+        {name: 'create', summary: 'Create a new A-Frame scene.' },
+        {name: 'serve', summary: 'Package an app for distribution.'},
+        // {name: 'update', summary: `Update the ${binStr} CLI to its latest version.`},
+      ]
+    },
+    {
+      header: 'Examples',
+      content: [
+        {
+          desc: '1. Create a new A-Frame scene at a URL.',
+          example: `$ ${binStr} [magenta]{create} default`,
+        },
+        {
+          desc: '2. Create a new A-Frame "Model Viewer" scene at a path.',
+          example: `$ ${binStr} [magenta]{create} model path/to/my/project/`,
+        },
+        {
+          desc: '3. Serve a local development server to preview an A-Frame scene in your browser.',
+          example: `$ ${binStr} [magenta]{serve}`,
+        },
+        {
+          desc: '4. Serve a local development server at a path.',
+          example: `$ ${binStr} [magenta]{serve} path/to/my/project/`,
+        }
+      ]
+    },
+    {
+      content: `Project homepage: [underline]{${pkgJson.homepage}}`
+    }
+  ];
+
+  const usage = commandLineUsage(sections);
+
+  console.log(usage);
+}
 
 function create () {
   const initSkeleton = require('init-skeleton').init;
@@ -154,18 +222,6 @@ switch (command) {
     break;
 }
 
-// const displayHelp = () => program.outputHelp(colorizeHelp);
-// const displayLogo = () => {
-//   const pictureTube = require('picture-tube');
-//   return fs.createReadStream(path.join(__dirname, 'assets', 'img', 'aframe-logo.png'))
-//     .pipe(pictureTube({cols: 46}))
-//     .pipe(process.stdout);
-// };
-//
-// program
-//   .version(pkg.version, '-v, --version', 'output the version number')
-//   .usage('[command] [options]');
-//
 // if (process.argv[2] === 'publish' || process.argv[2] === 'push') {
 //   process.argv[2] = 'deploy';
 // }
