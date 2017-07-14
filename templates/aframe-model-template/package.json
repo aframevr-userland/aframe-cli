@@ -4,7 +4,7 @@
   "author": "A-Frame authors",
   "version": "0.5.17",
   "license": "CC0-1.0",
-  "repository": "aframevr-userland/aframe-model-template",
+  "repository": "aframevr-userland/aframe-cli",
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
@@ -16,5 +16,60 @@
   },
   "devDependencies": {
     "aframe-cli": "0.5.16"
+  },
+  "aframe": {
+    "template": "model",
+    "name": "A-Frame Model Viewer",
+    "author": "A-Frame authors",
+    "license": "CC0-1.0",
+    "dependencies": {
+      "aframe": "0.6.0"
+    },
+    "assets": [
+      {
+        "src": "assets/index.html",
+        "type": "text/html"
+      },
+      {
+        "src": "css/app.css",
+        "type": "text/css"
+      },
+      {
+        "src": "js/initialize.js",
+        "type": "text/javascript"
+      },
+      {
+        "src": "js/components/teleport.js",
+        "type": "text/javascript"
+      },
+      {
+        "src": "assets/images/arrow.png",
+        "type": "image/png"
+      },
+      {
+        "src": "assets/images/grid.png",
+        "type": "image/png"
+      },
+      {
+        "src": "assets/images/sky.png",
+        "type": "image/png"
+      },
+      {
+        "src": "assets/models/rocky.bin"
+      },
+      {
+        "src": "assets/models/rocky.gltf"
+      },
+      {
+        "src": "assets/models/texture.png"
+      },
+      {
+        "src": "assets/sounds/switch.wav",
+        "type": "image/wav"
+      }
+    ],
+    "icons": [],
+    "screenshots": [],
+    "videos": []
   }
 }

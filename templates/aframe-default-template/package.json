@@ -4,7 +4,7 @@
   "author": "A-Frame authors",
   "version": "0.5.17",
   "license": "CC0-1.0",
-  "repository": "aframevr-userland/aframe-default-template",
+  "repository": "aframevr-userland/aframe-cli",
   "scripts": {
     "start": "npm run serve",
     "serve": "aframe serve",
@@ -15,5 +15,39 @@
   },
   "devDependencies": {
     "aframe-cli": "0.5.16"
+  },
+  "aframe": {
+    "template": "default",
+    "name": "A-Frame Scene",
+    "author": "A-Frame authors",
+    "license": "CC0-1.0",
+    "dependencies": {
+      "aframe": "0.6.0"
+    },
+    "assets": [
+      {
+        "src": "assets/index.html",
+        "type": "text/html"
+      },
+      {
+        "src": "css/app.css",
+        "type": "text/css"
+      },
+      {
+        "src": "js/initialize.js",
+        "type": "text/javascript"
+      },
+      {
+        "src": "assets/grid.png",
+        "type": "image/png"
+      },
+      {
+        "src": "assets/sky.png",
+        "type": "image/png"
+      }
+    ],
+    "icons": [],
+    "screenshots": [],
+    "videos": []
   }
 }
