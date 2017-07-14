@@ -2,14 +2,14 @@
   "templates": [
     {
       "alias": "default",
-      "url": "aframevr-userland/aframe-default-template",
+      "url": "aframe-default-template",
       "title": "Default A-Frame scene template",
       "description": "Default template for a default A-Frame scene.",
       "technologies": "ES6"
     },
     {
       "alias": "primitives",
-      "url": "aframevr-userland/aframe-primitives-template",
+      "url": "aframe-primitives-template",
       "title": "Primitives template",
       "description": "A-Frame scene built from primitives.",
       "components": {},
@@ -17,7 +17,7 @@
     },
     {
       "alias": "room",
-      "url": "aframevr-userland/aframe-room-template",
+      "url": "aframe-room-template",
       "title": "Room template",
       "description": "Room built using A-Frame.",
       "components": {},
@@ -25,7 +25,7 @@
     },
     {
       "alias": "model",
-      "url": "aframevr-userland/aframe-model-template",
+      "url": "aframe-model-template",
       "title": "Model Viewer",
       "description": "Model viewer built using A-Frame.",
       "components": {},
@@ -33,7 +33,7 @@
     },
     {
       "alias": "360-tour",
-      "url": "aframevr-userland/aframe-360-tour-template",
+      "url": "aframe-360-tour-template",
       "title": "360 tour template",
       "description": "360 tour built using A-Frame.",
       "components": {},

@@ -24,9 +24,10 @@ const pkgJson = require('./package.json');
 const utils = require('./lib/utils.js');
 
 const getBrunchConfigPath = utils.getBrunchConfigPath;
+const getTemplateByAliasOrUrl = utils.getTemplateByAliasOrUrl;
 const manifest = utils.manifestMerge;
+const templatesByAlias = utils.templatesByAlias;
 
-const validCommands = [null, 'create', 'build', 'deploy', 'serve', 'submit', 'version', 'help', 'update'];
 let parsedCommands = {};
 
 try {
@@ -91,13 +92,17 @@ function displayHelp () {
   let bulletCounter = 0;
 
   let links = [];
+
   if (pkgJson.homepage) {
     links.push({name: 'Project homepage', summary: `[underline]{${pkgJson.homepage}}`});
   }
+
   links.push({name: 'A-Frame examples', summary: `[underline]{https://aframe.io/examples/}`});
+
   if (typeof pkgJson.bugs === 'string') {
     pkgJson.bugs = {url: pkgJson.bugs};
   }
+
   if (pkgJson.bugs && pkgJson.bugs.url) {
     links.push({name: 'File an issue', summary: `[underline]{${pkgJson.bugs.url}}`});
   }
@@ -117,7 +122,7 @@ function displayHelp () {
     const sections = [
       {
         content: logoContent,
-        raw: true,
+        raw: true
       },
       {
         header: binName,
@@ -181,55 +186,64 @@ function displayHelp () {
 function create () {
   const initSkeleton = require('init-skeleton').init;
 
-  const templatesList = require('./templates/index.json').templates;
-
   const optionDefinitions = [
-    {name: 'template', alias: 't', type: String, defaultOption: true, defaultValue: argv[0] || 'default'},
-    {name: 'directory', alias: 'd', type: String, defaultValue: argv[1]},
+    {name: 'template', alias: 't', type: String, defaultOption: true, defaultValue: argv[0]},
+    {name: 'directory', alias: 'd', type: String, defaultOption: false, defaultValue: argv[1]},
   ];
+
   const templateNameDefault = 'aframe-default-template';
 
-  const options = commandLineArgs(optionDefinitions, {argv});
+  if (argv.length === 1) {
+    // Usage: `aframe new path/to/my/project/`.
+    let alias = (argv[0] || '').trim().toLowerCase().replace(/^aframe-/i, '').replace(/-template$/i, '');
+    if (!(alias in templatesByAlias) && !argv[0].includes('/aframe-') && !argv[0].endsWith('-template')) {
+      // It's not a local template (e.g., `model`), nor is it a remotely hosted Git template (e.g., `cvan/aframe-polar-template`).
+      optionDefinitions[0].defaultOption = false;
+      optionDefinitions[0].defaultValue = templateNameDefault;
 
-  const template = options.template;
-  let projectDir = options.directory;
-
-  let templateName = templateNameDefault;
-
-  if (template && typeof template === 'string') {
-    // If template name is provided in Git format (e.g., `cvan/aframe-polar-template`).
-    if (template.indexOf('/') === -1 && !template.startsWith('aframe-') && !template.endsWith('-template')) {
-      templateName = `aframe-${template.toLowerCase()}-template`;
-    } else {
-      templateName = template;
+      optionDefinitions[1].defaultOption = true;
+      optionDefinitions[1].defaultValue = argv[0];
     }
   }
 
-  const templateSourceDir = path.join(__dirname, '..', 'templates', templateName);
-  if (!projectDir) {
-    projectDir = path.basename(templateName);
+  const options = commandLineArgs(optionDefinitions, {argv});
+
+  let template;
+  let templatePath;
+  if (options.template) {
+    template = getTemplateByAliasOrUrl(options.template.trim().toLowerCase().replace(/^aframe-/i, '').replace(/-template$/i, ''));
+    if (template) {
+      templatePath = template.url;
+    }
   }
+  templatePath = templatePath || templateNameDefault;
+
+  const templateSourceDir = path.join(__dirname, 'templates', templatePath);
+
+  let projectDir = options.directory || path.basename(templatePath);
 
   if (fs.existsSync(templateSourceDir)) {
-    logger.log(`Copying local template "${templateName}" to "${projectDir}" …`);
+    logger.log(`Copying local template "${template.alias}" to "${projectDir}" …`);
 
-    return fs.copy(templateSourceDir, projectDir, {
-      errorOnExist: true,
-      filter: filepath => !/^\.(git|hg|svn|node_modules)$/.test(path.basename(filepath))
-    }).then(() => {
-      return install({
-        rootPath,
-        pkgType: ['package', 'bower'],
-        logger
+    return fs.ensureDir(projectDir).then(() => {
+      return fs.copy(templateSourceDir, projectDir, {
+        errorOnExist: true,
+        filter: filepath => !/^node_modules|bower_components|\.(git|hg|svn)$/i.test(path.basename(filepath))
+      }).then(() => {
+        return install({
+          logger: logger,
+          rootPath: projectDir,
+          pkgType: ['package', 'bower'],
+        });
       });
     });
   }
 
-  logger.log(`Downloading remote template "${templateName}" to "${projectDir}" …`);
+  logger.log(`Downloading remote template "${templatePath}" to "${projectDir}" …`);
 
-  return initSkeleton(templateName, {
-    logger,
-    projectDir,
+  return initSkeleton(templatePath, {
+    logger: logger,
+    rootPath: projectDir,
     commandName: 'aframe create'
   });
 }
