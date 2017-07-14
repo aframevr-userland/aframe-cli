@@ -25,7 +25,7 @@ const utils = require('./lib/utils.js');
 
 const getBrunchConfigPath = utils.getBrunchConfigPath;
 const getTemplateByAliasOrUrl = utils.getTemplateByAliasOrUrl;
-const manifest = utils.manifestMerge;
+const mergeManifest = utils.mergeManifest;
 const templatesByAlias = utils.templatesByAlias;
 
 const validCommands = [null, 'create', 'build', 'deploy', 'serve', 'submit', 'version', 'help', 'update'];
@@ -155,7 +155,7 @@ function displayHelp () {
         content: [
           {name: cmd('create'), summary: 'Create a new A-Frame scene.'},
           {name: cmd('build'), summary: 'Build an A-Frame scene.'},
-          {name: cmd('serve'), summary: 'Serve an A-Frame scene for local development and testing.'},
+          {name: cmd('serve'), summary: 'Serve a local-development server for an A-Frame project.'},
           // {name: cmd('update'), summary: `Update the ${binStr} CLI to its latest version.`},
           {name: cmd('version'), summary: 'Output the version number.'},
           {name: cmd('help'), summary: 'Output the usage information.'},
@@ -181,11 +181,11 @@ function displayHelp () {
             example: `$ ${binStr} ${cmd('create')} cvan/aframe-polar-template`,
           },
           {
-            desc: bullet('Serve a local development server to preview an A-Frame scene in your browser.'),
+            desc: bullet('Serve a local-development server to view an A-Frame scene in your browser.'),
             example: `$ ${binStr} ${cmd('serve')}`,
           },
           {
-            desc: bullet('Serve a local development server at a path.'),
+            desc: bullet('Serve a local-development server at a path.'),
             example: `$ ${binStr} ${cmd('serve')} path/to/my/project/`,
           }
         ]
@@ -304,11 +304,107 @@ function build () {
   });
 }
 
-function serve (argv) {
-  // TODO: Implement!
-  logger.error('Not Implemented');
-  return Promise.reject(new Error('Not Implemented'));
-  // return commands.serve(watchPath, options);
+function serve () {
+  const url = require('url');
+
+  const brunchWatch = require('brunch').watch;
+  const clipboardy = require('clipboardy');
+  const formidable = require('formidable');
+  const opn = require('opn');
+
+  const optionDefinitions = [
+    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: argv[0] || process.cwd()},
+    {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(argv[0] || process.cwd())},
+    {name: 'jobs', alias: 'j', type: Boolean, defaultValue: true},
+    {name: 'no-clipboard', alias: 'l', type: Boolean, defaultValue: false},
+    {name: 'no-open', alias: 'o', type: Boolean, defaultValue: false}
+  ];
+
+  const options = commandLineArgs(optionDefinitions, {argv});
+  options.server = true;
+  options.network = true;
+
+  const projectDir = options.directory;
+  console.log(options.config);
+
+  return new Promise((resolve, reject) => {
+    const optionsFile = require(options.config);
+
+    logger.log(`Watching "${projectDir}" …`);
+
+    // Copy the server URL to the user's clipboard.
+    const port = (optionsFile.server && optionsFile.server.port) || 3333;
+    const https = options.https || options.ssl || options.secure || false;
+    const serverUrl = `http${https ? 's' : ''}://localhost:${port}/`;
+    try {
+      const watcher = brunchWatch(true, options.directory, options, () => {
+        // Saves preview videos from recorder component.
+        watcher.server.on('request', function (req, res) {
+          const method = req.method.toLowerCase();
+          const pathname = url.parse(req.url).pathname;
+
+          if (method === 'post' && pathname === '/upload') {
+            let form = new formidable.IncomingForm();
+            let files = [];
+
+            form.encoding = 'binary';
+            form.keepExtensions = true;
+            form.multiple = true;
+
+            const uploadDir = path.join(projectDir, 'app', 'assets', 'video');
+
+            fs.ensureDir(uploadDir);
+
+            form.on('fileBegin', function(name, file) {
+              file.path = path.join(uploadDir, file.name);
+            });
+
+            form.on('file', (field, file) => {
+              files.push([field, file]);
+
+              const data = {
+                'aframe': {
+                  'videos': [
+                    {
+                      'src': `assets/video/${file.name}`,
+                      'type': file.type
+                    }
+                  ]
+                }
+              };
+
+              mergeManifest(projectDir + '/package.json', data);
+            });
+
+            form.on('error', formErr => {
+              console.error(formErr);
+            });
+
+            form.on('end', () => {
+              res.end();
+            });
+
+            form.parse(req);
+          }
+        });
+
+        logger.log(`Local server running: ${serverUrl}`);
+
+        if (!options.noClipboard) {
+          clipboardy.writeSync(serverUrl);
+        }
+
+        if (!options.noOpen) {
+          opn(serverUrl, {wait: false});
+        }
+
+        resolve(serverUrl);
+      });
+    } catch (err) {
+      logger.error(`Could not watch project "${projectDir}" …`);
+      reject(err);
+    }
+  });
 }
 
 function deploy (argv) {
@@ -380,34 +476,6 @@ switch (command) {
 //     setTimeout(() => {
 //       process.stdout.write('\n');
 //       commands.submit(siteUrl, options);
-//     }, 150);
-//   });
-//
-// program
-//   .command('serve [path] [options]')
-//   .alias('s')
-//   .description('Serve an A-Frame project in path (default: current directory).')
-//   .option('-e, --env [setting]', 'specify a set of override settings to apply')
-//   .option('-p, --production', 'same as `--env production`')
-//   .option('-s, --server', 'run a simple HTTP server for the public directory on localhost')
-//   .option('-n, --network', 'if `server` was given, allow access from the network')
-//   .option('-P, --port [port]', 'if `server` was given, listen on this port')
-//   .option('-d, --debug [pattern]', 'print verbose debug output to stdout')
-//   .option('-j, --jobs [num]', 'parallelize the build')
-//   .option('-c, --config [path]', 'specify a path to Brunch config file')
-//   .option('--stdin', 'listen to stdin and exit when stdin closes')
-//   .option('--not-open', 'do not automatically open browser window', Boolean, true)
-//   .option('--no-clipboard', 'do not automatically add served URL to clipboard')
-//   .action(function (watchPath, options) {
-//     if (arguments.length)
-//     console.log('options', options);
-//     console.log('arguments', arguments);
-//
-//     displayLogo();
-//
-//     setTimeout(() => {
-//       process.stdout.write('\n');
-//       commands.serve(watchPath, options);
 //     }, 150);
 //   });
 //
