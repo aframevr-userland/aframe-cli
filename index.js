@@ -166,28 +166,28 @@ function displayHelp () {
         content: [
           {
             desc: bullet('Create a new A-Frame scene.'),
-            example: `$ ${binStr} [magenta]{create}`,
+            example: `$ ${binStr} ${cmd('create')}`,
           },
           {
             desc: bullet('Create a new empty scene.'),
-            example: `$ ${binStr} [magenta]{create} default`,
+            example: `$ ${binStr} ${cmd('create')} default`,
           },
           {
             desc: bullet('Create a "Model Viewer" scene at a path.'),
-            example: `$ ${binStr} [magenta]{create} model path/to/my/project/`,
+            example: `$ ${binStr} ${cmd('create')} model path/to/my/project/`,
           },
           {
             desc: bullet('Create a scene based on a template on GitHub.'),
-            example: `$ ${binStr} [magenta]{create} cvan/aframe-polar-template`,
+            example: `$ ${binStr} ${cmd('create')} cvan/aframe-polar-template`,
           },
-          // {
-          //   desc: bullet('Serve a local development server to preview an A-Frame scene in your browser.'),
-          //   example: `$ ${binStr} [magenta]{serve}`,
-          // },
-          // {
-          //   desc: bullet('Serve a local development server at a path.'),
-          //   example: `$ ${binStr} [magenta]{serve} path/to/my/project/`,
-          // }
+          {
+            desc: bullet('Serve a local development server to preview an A-Frame scene in your browser.'),
+            example: `$ ${binStr} ${cmd('serve')}`,
+          },
+          {
+            desc: bullet('Serve a local development server at a path.'),
+            example: `$ ${binStr} ${cmd('serve')} path/to/my/project/`,
+          }
         ]
       },
       {
