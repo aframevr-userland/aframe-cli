@@ -28,6 +28,34 @@ const getTemplateByAliasOrUrl = utils.getTemplateByAliasOrUrl;
 const manifest = utils.manifestMerge;
 const templatesByAlias = utils.templatesByAlias;
 
+const validCommands = [null, 'create', 'build', 'deploy', 'serve', 'submit', 'version', 'help', 'update'];
+
+switch (process.argv[2]) {
+  case 'new':
+    // For backwards compatibility, convert `aframe new` commands from the old to new CLI format.
+    //
+    //   aframe new 360-tour           =>  aframe new --template 360-tour
+    //   aframe new 360-tour my-scene  =>  aframe new --template 360-tour my-scene
+    //
+    // NOTE: The new CLI usage is defined here: https://aframe.io/cli/
+    //       The new CLI rearchitecture is being properly addressed in PR #68:
+    //       https://github.com/aframevr-userland/aframe-cli/pull/68
+    if (!process.argv.includes('--template')) {
+      process.argv.splice(3, 0, '--template');
+    }
+  case 'start':
+    process.argv[2] = 'create';
+    break;
+  case 'compile':
+  case 'generate':
+    process.argv[2] = 'build';
+    break;
+  case 'publish':
+  case 'push':
+    process.argv[2] = 'deploy';
+    break;
+}
+
 let parsedCommands = {};
 
 try {
@@ -39,24 +67,6 @@ try {
   } else {
     throw err;
   }
-}
-
-// For backwards compatibility, convert `aframe new` commands from the old to new CLI format.
-//
-//   aframe new 360-tour           =>  aframe new --template 360-tour
-//   aframe new 360-tour my-scene  =>  aframe new --template 360-tour my-scene
-//
-// NOTE: The new CLI usage is defined here: https://aframe.io/cli/
-//       The new CLI rearchitecture is being properly addressed in PR #68:
-//       https://github.com/aframevr-userland/aframe-cli/pull/68
-if (process.argv[2] === 'new') {
-  if (!process.argv.includes('--template')) {
-    process.argv.splice(3, 0, '--template');
-  }
-}
-
-if (process.argv[2] === 'publish' || process.argv[2] === 'push') {
-  process.argv[2] = 'deploy';
 }
 
 const command = parsedCommands.command;
@@ -144,8 +154,8 @@ function displayHelp () {
         header: 'Commands',
         content: [
           {name: cmd('create'), summary: 'Create a new A-Frame scene.'},
-          {name: cmd('build'), summary: 'Build an A-Frame scene in path.'},
-          {name: cmd('serve'), summary: 'Package an app for distribution.'},
+          {name: cmd('build'), summary: 'Build an A-Frame scene.'},
+          {name: cmd('serve'), summary: 'Serve an A-Frame scene for local development and testing.'},
           // {name: cmd('update'), summary: `Update the ${binStr} CLI to its latest version.`},
           {name: cmd('version'), summary: 'Output the version number.'},
           {name: cmd('help'), summary: 'Output the usage information.'},
@@ -257,6 +267,42 @@ function create () {
   });
 }
 
+function build () {
+  const brunchBuild = require('brunch').build;
+
+  const projectDir = argv[0] || process.cwd();
+
+  const optionDefinitions = [
+    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: argv[0] || process.cwd()},
+    {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)}
+  ];
+
+  const options = commandLineArgs(optionDefinitions, {argv});
+
+  return new Promise((resolve, reject) => {
+    logger.log(`Building project "${projectDir}" …`);
+
+    try {
+      brunchBuild(options, resolve);
+    } catch (err) {
+      logger.error(`Could not build project "${projectDir}" …`);
+      throw err;
+    }
+  }).then(() => {
+    let builtPath = null;
+    try {
+      builtPath = path.resolve(projectDir, require(options.config).paths.public);
+    } catch (err) {
+    }
+    if (builtPath) {
+      logger.log(`Built project "${projectDir}" to "${builtPath}"`);
+      return Promise.resolve(builtPath);
+    } else {
+      logger.log(`Built project "${projectDir}"`);
+    }
+  });
+}
+
 function serve (argv) {
   // TODO: Implement!
   logger.error('Not Implemented');
@@ -274,6 +320,9 @@ function deploy (argv) {
 switch (command) {
   case 'create':
     create();
+    break;
+  case 'build':
+    build();
     break;
   case 'serve':
     serve();
@@ -360,31 +409,6 @@ switch (command) {
 //       commands.serve(watchPath, options);
 //     }, 150);
 //   });
-//
-// if (process.argv.length <= 3) {
-//   process.argv.splice(2,
-// }
-//
-// program
-//   .command('build [path]')
-//   .alias('b')
-//   .description('Build an A-Frame project in path (default: current directory).')
-//   .option('-e, --env [setting]', 'specify a set of override settings to apply')
-//   .option('-p, --production', 'same as `--env production`')
-//   .option('-d, --debug [pattern]', 'print verbose debug output to stdout')
-//   .option('-j, --jobs [num]', 'parallelize the build')
-//   .option('-c, --config [path]', 'specify a path to Brunch config file')
-//   .action((filePath, options) => commands.build(filePath, options));
-//
-// program
-//   .command('new [path]')
-//   .alias('n')
-//   .description('Create a new A-Frame project in path.')
-//   .option('-t, --template [name]', 'template name or URL from https://aframe.io/templates')
-//   .on('--help', () => {
-//     require('./lib/init-template.js').printBanner('aframe new --template');
-//   })
-//   .action(commands.new);
 //
 // let args = process.argv.slice();
 // const programName = args[1] = 'aframe';
