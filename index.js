@@ -94,17 +94,17 @@ function displayHelp () {
   let links = [];
 
   if (pkgJson.homepage) {
-    links.push({name: 'Project homepage', summary: `[underline]{${pkgJson.homepage}}`});
+    links.push({name: 'Project homepage', summary: link(pkgJson.homepage)});
   }
 
-  links.push({name: 'A-Frame examples', summary: `[underline]{https://aframe.io/examples/}`});
+  links.push({name: 'A-Frame examples', summary: link('https://aframe.io/examples/')});
 
   if (typeof pkgJson.bugs === 'string') {
     pkgJson.bugs = {url: pkgJson.bugs};
   }
 
   if (pkgJson.bugs && pkgJson.bugs.url) {
-    links.push({name: 'File an issue', summary: `[underline]{${pkgJson.bugs.url}}`});
+    links.push({name: 'File an issue', summary: link(pkgJson.bugs.url)});
   }
 
   return getHeaderLogo().then(content => {
@@ -114,8 +114,16 @@ function displayHelp () {
     displayUsage();
   });
 
+  function link (url) {
+    return `[underline]{${url}}`;
+  }
+
   function bullet (str) {
     return `${++bulletCounter}. ${str}`;
+  }
+
+  function cmd (cmdName) {
+    return `[magenta]{${cmdName}}`;
   }
 
   function displayUsage () {
@@ -135,11 +143,12 @@ function displayHelp () {
       {
         header: 'Commands',
         content: [
-          {name: 'create', summary: 'Create a new A-Frame scene.' },
-          {name: 'serve', summary: 'Package an app for distribution.'},
-          // {name: 'update', summary: `Update the ${binStr} CLI to its latest version.`},
-          {name: 'version', summary: 'Output the version number.'},
-          {name: 'help', summary: 'Output the usage information.'},
+          {name: cmd('create'), summary: 'Create a new A-Frame scene.'},
+          {name: cmd('build'), summary: 'Build an A-Frame scene in path.'},
+          {name: cmd('serve'), summary: 'Package an app for distribution.'},
+          // {name: cmd('update'), summary: `Update the ${binStr} CLI to its latest version.`},
+          {name: cmd('version'), summary: 'Output the version number.'},
+          {name: cmd('help'), summary: 'Output the usage information.'},
         ]
       },
       {
