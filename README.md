@@ -1,10 +1,6 @@
-# aframe-cli
+# `aframe` CLI
 
 A command-line tool for building, managing, and publishing A-Frame scenes.
-
-> **⚠ NOTE:️ This is not meant to be used just yet. This is a WIP!**
-
-> _TODO: Upstream changes to [`angle`](https://github.com/aframevr/angle)._
 
 
 ### Usage
@@ -120,11 +116,8 @@ For other options, refer to the usage information returned from `aframe serve --
     -h, --help             output usage information
     -e, --env [setting]    specify a set of override settings to apply
     -p, --production       same as `--env production`
-    -s, --server           run a simple HTTP server for the public directory on localhost
-    -n, --network          if `server` was given, allow access from the network
     -P, --port [port]      if `server` was given, listen on this port
     -d, --debug [pattern]  print verbose debug output to stdout
-    -j, --jobs [num]       parallelize the build
     -c, --config [path]    specify a path to Brunch config file
     --stdin                listen to stdin and exit when stdin closes
 ```

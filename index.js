@@ -23,6 +23,7 @@ const commands = require('./commands/index.js');
 const pkgJson = require('./package.json');
 const utils = require('./lib/utils.js');
 
+const getArgvPaths = utils.getArgvPaths;
 const getBrunchConfigPath = utils.getBrunchConfigPath;
 const getTemplateByAliasOrUrl = utils.getTemplateByAliasOrUrl;
 const mergeManifest = utils.mergeManifest;
@@ -144,7 +145,7 @@ function displayHelp () {
       },
       {
         header: binName,
-        content: `${binStr} is a command-line interface for building, managing, and publishing A-Frame scenes.`
+        content: `${binStr} is a command-line tool for building, managing, and publishing A-Frame scenes.`
       },
       {
         header: 'Usage',
@@ -271,10 +272,10 @@ function create () {
 function build () {
   const brunchBuild = require('brunch').build;
 
-  const projectDir = argv[0] || process.cwd();
+  const projectDir = getArgvPaths(argv)[0] || process.cwd();
 
   const optionDefinitions = [
-    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: argv[0] || process.cwd()},
+    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
     {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)}
   ];
 
@@ -312,20 +313,28 @@ function serve () {
   const formidable = require('formidable');
   const opn = require('opn');
 
+  let projectDir = getArgvPaths(argv)[0] || process.cwd();
+
   const optionDefinitions = [
-    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: argv[0] || process.cwd()},
-    {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(argv[0] || process.cwd())},
-    {name: 'jobs', alias: 'j', type: Boolean, defaultValue: true},
-    {name: 'no-clipboard', alias: 'l', type: Boolean, defaultValue: false},
-    {name: 'no-open', alias: 'o', type: Boolean, defaultValue: false}
+    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
+    {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)},
+    {name: 'open', alias: 'o', type: String},
+    {name: 'clipboard', alias: 'l', type: String, defaultValue: null},
+    {name: 'port', alias: 'P', type: Number, defaultValue: 3333},
+    {name: 'debug', alias: 'e', type: String},
+    {name: 'env', alias: 'n', type: String},
+    {name: 'production', alias: 'p', type: Boolean, defaultValue: false}
   ];
 
   const options = commandLineArgs(optionDefinitions, {argv});
+  options.directory = path.resolve(options.directory);
+  options.open = !('open' in options) || options.open === 'false' ? false : true;
+  options.clipboard = options.clipboard === 'false' ? false : true;
   options.server = true;
   options.network = true;
 
-  const projectDir = options.directory;
-  console.log(options.config);
+  projectDir = options.directory;
+  process.chdir(projectDir);
 
   return new Promise((resolve, reject) => {
     const optionsFile = require(options.config);
@@ -337,7 +346,7 @@ function serve () {
     const https = options.https || options.ssl || options.secure || false;
     const serverUrl = `http${https ? 's' : ''}://localhost:${port}/`;
     try {
-      const watcher = brunchWatch(true, options.directory, options, () => {
+      const watcher = brunchWatch(options, () => {
         // Saves preview videos from recorder component.
         watcher.server.on('request', function (req, res) {
           const method = req.method.toLowerCase();
@@ -390,11 +399,11 @@ function serve () {
 
         logger.log(`Local server running: ${serverUrl}`);
 
-        if (!options.noClipboard) {
+        if (options.clipboard) {
           clipboardy.writeSync(serverUrl);
         }
 
-        if (!options.noOpen) {
+        if (options.open) {
           opn(serverUrl, {wait: false});
         }
 
