@@ -16,14 +16,33 @@
       </a-assets>
 
       <a-tour>
-        <a-panorama id="livingroom" src="images/livingroom.jpg" rotation="0 90 0"></a-panorama>
-        <a-panorama id="kitchen" src="images/kitchen.jpg" rotation="0 -90 0"></a-panorama>
+        <a-panorama id="seawall" src="images/seawall.jpg" rotation="0 140 0"></a-panorama>
+        <a-panorama id="yaletown" src="images/yaletown.jpg" rotation="0 120 0"></a-panorama>
+        <a-panorama id="aquabus" src="images/aquabus.jpg" rotation="0 50 0"></a-panorama>
+        <a-panorama id="dock" src="images/dock.jpg" rotation="0 -90 0"></a-panorama>
 
-        <a-hotspot for="livingroom" to="kitchen" mixin="hotspot-target" position="5 0 0" rotation="0 -90 0">
-          <a-text value="KITCHEN" align="center" mixin="hotspot-text"></a-text>
+        <a-hotspot id="aquabus-dock" for="aquabus" to="dock" mixin="hotspot-target" position="-5.00 -0.09 0.03" rotation="-1.03 90.34 0.00">
+          <a-text value="Boat dock" align="center" mixin="hotspot-text"></a-text>
         </a-hotspot>
-        <a-hotspot for="kitchen" to="livingroom" mixin="hotspot-target" position="2 0 5" rotation="0 180 0">
-          <a-text value="LIVING ROOM" align="center" mixin="hotspot-text"></a-text>
+
+        <a-hotspot id="dock-aquabus" for="dock" to="aquabus" mixin="hotspot-target" position="-4.99 -0.21 -0.24" rotation="-2.41 87.23 0.00">
+          <a-text value="Aquabus" align="center" mixin="hotspot-text"></a-text>
+        </a-hotspot>
+
+        <a-hotspot id="dock-yaletown" for="dock" to="yaletown" mixin="hotspot-target" position="4.99 0.08 0.23" rotation="-1.26 -92.41 0">
+          <a-text value="Yaletown" align="center" mixin="hotspot-text"></a-text>
+        </a-hotspot>
+
+        <a-hotspot id="yaletown-dock" for="yaletown" to="dock" mixin="hotspot-target" position="-4.70 -0.83 1.49" rotation="-9.51 107.62 0.00">
+          <a-text value="Boat dock" align="center" mixin="hotspot-text"></a-text>
+        </a-hotspot>
+
+        <a-hotspot id="yaletown-seawall" for="yaletown" to="seawall" mixin="hotspot-target" position="-3.55 -0.22 -3.51" rotation="-2.52 45.29 0.00">
+          <a-text value="Seawall" align="center" mixin="hotspot-text"></a-text>
+        </a-hotspot>
+
+        <a-hotspot id="seawall-yaletown" for="seawall" to="yaletown" mixin="hotspot-target" position="-1.40 -0.07 4.80" rotation="-0.80 163.72 0.00">
+          <a-text value="Yaletown" align="center" mixin="hotspot-text"></a-text>
         </a-hotspot>
       </a-tour>
 
