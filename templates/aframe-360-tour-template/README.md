@@ -49,3 +49,21 @@ String together a tour with hotspots using 360&deg; panorama images.
       <a-mixin id="hotspot-target" geometry="primitive: sphere; radius: 0.15" material="color: yellow"></a-mixin>
     </a-assets>
     ```
+
+### Hotspot-helper
+
+![Hotspot Helper](https://raw.githubusercontent.com/aframevr-userland/aframe-cli/master/templates/aframe-360-tour-template/images/hotspot-helper.png)
+
+Included in the tour template is a `hotspot-helper` component that helps make it
+easier to place hotspots in your scene. To use the helper, add it to `<a-tour>`
+and set it to target the hotspot you want to place.
+
+```html
+<a-tour hotspot-helper="target: #my-hotspot">
+  <!-- sets a hotspot from livingroom to kitchen -->
+  <a-hotspot id="my-hotspot" for="livingroom" to="kitchen"></a-hotspot>
+</a-tour>
+```
+
+Once you have found a good placement for your hotspot, copy the `position` and `rotation`
+values into the hotspot markup.
