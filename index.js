@@ -26,7 +26,9 @@ const utils = require('./lib/utils.js');
 const getArgvPaths = utils.getArgvPaths;
 const getBrunchConfigPath = utils.getBrunchConfigPath;
 const getTemplateByAliasOrUrl = utils.getTemplateByAliasOrUrl;
-const mergeManifest = utils.mergeManifest;
+const mergePackage = utils.mergePackage;
+const pkgDefault = utils.pkgDefault;
+const readPackage = utils.readPackage;
 const templatesByAlias = utils.templatesByAlias;
 
 const validCommands = [null, 'create', 'build', 'deploy', 'serve', 'submit', 'version', 'help', 'update'];
@@ -270,149 +272,181 @@ function create () {
 }
 
 function build () {
-  const brunchBuild = require('brunch').build;
-
   const projectDir = getArgvPaths(argv)[0] || process.cwd();
 
-  const optionDefinitions = [
-    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
-    {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)}
-  ];
+  process.chdir(projectDir);
 
-  const options = commandLineArgs(optionDefinitions, {argv});
+  return readPackage(projectDir).then(pkg => {
+    if (!pkg.scripts.build.toLowerCase().trim().endsWith(pkgDefault.scripts.build)) {
+      const spawn = require('child_process').spawn;
 
-  return new Promise((resolve, reject) => {
-    logger.log(`Building project "${projectDir}" …`);
+      logger.log(`Building project using custom "build" npm script …`);
 
-    try {
-      brunchBuild(options, resolve);
-    } catch (err) {
-      logger.error(`Could not build project "${projectDir}" …`);
-      throw err;
+      const child = spawn('npm', ['run', 'build'], {nodejs: true});
+      child.stdout.setEncoding('utf8');
+      child.stdout.on('data', logger.info);
+      child.stdout.on('error', logger.error);
+
+      return Promise.resolve(pkg.scripts.build);
     }
-  }).then(() => {
-    let builtPath = null;
-    try {
-      builtPath = path.resolve(projectDir, require(options.config).paths.public);
-    } catch (err) {
-    }
-    if (builtPath) {
-      logger.log(`Built project "${projectDir}" to "${builtPath}"`);
-      return Promise.resolve(builtPath);
-    } else {
-      logger.log(`Built project "${projectDir}"`);
-    }
+
+    const brunchBuild = require('brunch').build;
+
+    const optionDefinitions = [
+      {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
+      {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)}
+    ];
+
+    const options = commandLineArgs(optionDefinitions, {argv});
+
+    return new Promise((resolve, reject) => {
+      logger.log(`Building project "${projectDir}" …`);
+
+      try {
+        brunchBuild(options, resolve);
+      } catch (err) {
+        logger.error(`Could not build project "${projectDir}" …`);
+        throw err;
+      }
+    }).then(() => {
+      let builtPath = null;
+      try {
+        builtPath = path.resolve(projectDir, require(options.config).paths.public);
+      } catch (err) {
+      }
+      if (builtPath) {
+        logger.log(`Built project "${projectDir}" to "${builtPath}"`);
+        return Promise.resolve(builtPath);
+      } else {
+        logger.log(`Built project "${projectDir}"`);
+      }
+    });
   });
 }
 
 function serve () {
-  const url = require('url');
-
-  const brunchWatch = require('brunch').watch;
-  const clipboardy = require('clipboardy');
-  const formidable = require('formidable');
-  const opn = require('opn');
-
   let projectDir = getArgvPaths(argv)[0] || process.cwd();
 
-  const optionDefinitions = [
-    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
-    {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)},
-    {name: 'open', alias: 'o', type: String},
-    {name: 'clipboard', alias: 'l', type: String, defaultValue: null},
-    {name: 'port', alias: 'P', type: Number, defaultValue: 3333},
-    {name: 'debug', alias: 'e', type: String},
-    {name: 'env', alias: 'n', type: String},
-    {name: 'production', alias: 'p', type: Boolean, defaultValue: false}
-  ];
-
-  const options = commandLineArgs(optionDefinitions, {argv});
-  options.directory = path.resolve(options.directory);
-  options.open = !('open' in options) || options.open === 'false' ? false : true;
-  options.clipboard = options.clipboard === 'false' ? false : true;
-  options.server = true;
-  options.network = true;
-
-  projectDir = options.directory;
   process.chdir(projectDir);
 
-  return new Promise((resolve, reject) => {
-    const optionsFile = require(options.config);
+  return readPackage(projectDir).then(pkg => {
+    if (pkg.scripts.serve.toLowerCase().trim().indexOf(pkgDefault.scripts.serve) === -1) {
+      const spawn = require('child_process').spawn;
 
-    logger.log(`Watching "${projectDir}" …`);
+      logger.log(`Serving project using custom "serve" npm script …`);
 
-    // Copy the server URL to the user's clipboard.
-    const port = (optionsFile.server && optionsFile.server.port) || 3333;
-    const https = options.https || options.ssl || options.secure || false;
-    const serverUrl = `http${https ? 's' : ''}://localhost:${port}/`;
-    try {
-      const watcher = brunchWatch(options, () => {
-        // Saves preview videos from recorder component.
-        watcher.server.on('request', function (req, res) {
-          const method = req.method.toLowerCase();
-          const pathname = url.parse(req.url).pathname;
+      const child = spawn('npm', ['run', 'serve'], {nodejs: true});
+      child.stdout.setEncoding('utf8');
+      child.stdout.on('data', logger.info);
+      child.stdout.on('error', logger.error);
 
-          if (method === 'post' && pathname === '/upload') {
-            let form = new formidable.IncomingForm();
-            let files = [];
-
-            form.encoding = 'binary';
-            form.keepExtensions = true;
-            form.multiple = true;
-
-            const uploadDir = path.join(projectDir, 'app', 'assets', 'video');
-
-            fs.ensureDir(uploadDir);
-
-            form.on('fileBegin', function(name, file) {
-              file.path = path.join(uploadDir, file.name);
-            });
-
-            form.on('file', (field, file) => {
-              files.push([field, file]);
-
-              const data = {
-                'aframe': {
-                  'videos': [
-                    {
-                      'src': `assets/video/${file.name}`,
-                      'type': file.type
-                    }
-                  ]
-                }
-              };
-
-              mergeManifest(projectDir + '/package.json', data);
-            });
-
-            form.on('error', formErr => {
-              console.error(formErr);
-            });
-
-            form.on('end', () => {
-              res.end();
-            });
-
-            form.parse(req);
-          }
-        });
-
-        logger.log(`Local server running: ${serverUrl}`);
-
-        if (options.clipboard) {
-          clipboardy.writeSync(serverUrl);
-        }
-
-        if (options.open) {
-          opn(serverUrl, {wait: false});
-        }
-
-        resolve(serverUrl);
-      });
-    } catch (err) {
-      logger.error(`Could not watch project "${projectDir}" …`);
-      reject(err);
+      return Promise.resolve(pkg.scripts.serve);
     }
+
+    const url = require('url');
+
+    const brunchWatch = require('brunch').watch;
+    const clipboardy = require('clipboardy');
+    const formidable = require('formidable');
+    const opn = require('opn');
+
+    const optionDefinitions = [
+      {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
+      {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)},
+      {name: 'open', alias: 'o', type: String},
+      {name: 'clipboard', alias: 'l', type: String, defaultValue: null},
+      {name: 'port', alias: 'P', type: Number, defaultValue: 3333},
+      {name: 'debug', alias: 'e', type: String},
+      {name: 'env', alias: 'n', type: String},
+      {name: 'production', alias: 'p', type: Boolean, defaultValue: false}
+    ];
+
+    const options = commandLineArgs(optionDefinitions, {argv});
+    options.directory = path.resolve(options.directory);
+    options.open = !('open' in options) || options.open === 'false' ? false : true;
+    options.clipboard = options.clipboard === 'false' ? false : true;
+    options.server = true;
+    options.network = true;
+
+    projectDir = options.directory;
+    process.chdir(projectDir);
+
+    return new Promise((resolve, reject) => {
+      const optionsFile = require(options.config);
+
+      logger.log(`Watching "${projectDir}" …`);
+
+      // Copy the server URL to the user's clipboard.
+      const port = (optionsFile.server && optionsFile.server.port) || 3333;
+      const https = options.https || options.ssl || options.secure || false;
+      const serverUrl = `http${https ? 's' : ''}://localhost:${port}/`;
+      try {
+        const watcher = brunchWatch(options, () => {
+          // Saves preview videos from recorder component.
+          watcher.server.on('request', function (req, res) {
+            const method = req.method.toLowerCase();
+            const pathname = url.parse(req.url).pathname;
+
+            if (method === 'post' && pathname === '/upload') {
+              let form = new formidable.IncomingForm();
+              let files = [];
+
+              form.encoding = 'binary';
+              form.keepExtensions = true;
+              form.multiple = true;
+
+              const uploadDir = path.join(projectDir, 'app', 'assets', 'video');
+
+              fs.ensureDir(uploadDir);
+
+              form.on('fileBegin', (name, file) => {
+                file.path = path.join(uploadDir, file.name);
+              });
+
+              form.on('file', (field, file) => {
+                files.push([field, file]);
+
+                mergePackage(path.join(projectDir, 'package.json'), {
+                  aframe: {
+                    videos: [
+                      {
+                        src: `assets/video/${file.name}`,
+                        type: file.type
+                      }
+                    ]
+                  }
+                });
+              });
+
+              form.on('error', formErr => {
+                logger.error(formErr);
+              });
+
+              form.on('end', () => {
+                res.end();
+              });
+
+              form.parse(req);
+            }
+          });
+
+          logger.log(`Local server running: ${serverUrl}`);
+
+          if (options.clipboard) {
+            clipboardy.writeSync(serverUrl);
+          }
+
+          if (options.open) {
+            opn(serverUrl, {wait: false});
+          }
+
+          resolve(serverUrl);
+        });
+      } catch (err) {
+        logger.error(`Could not watch project "${projectDir}" …`);
+        reject(err);
+      }
+    });
   });
 }
 
@@ -439,9 +473,9 @@ switch (command) {
   case 'help':
     displayHelp();
     break;
-  case 'update':
-    updateRuntime();
-    break;
+  // case 'update':
+  //   updateRuntime();
+  //   break;
   default:
     if (argv.includes('-v') ||
         argv.includes('--v') ||
