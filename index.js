@@ -31,7 +31,7 @@ const pkgDefault = utils.pkgDefault;
 const readPackage = utils.readPackage;
 const templatesByAlias = utils.templatesByAlias;
 
-const validCommands = [null, 'create', 'build', 'deploy', 'serve', 'submit', 'version', 'help', 'update'];
+const validCommands = [null, 'create', 'build', 'serve', 'deploy', 'submit', 'version', 'help', 'update'];
 
 switch (process.argv[2]) {
   case 'new':
@@ -65,7 +65,7 @@ try {
   parsedCommands = commandLineCommands(validCommands);
 } catch (err) {
   if (err.name === 'INVALID_COMMAND') {
-    displayHelp();
+    help();
     process.exit(1);
   } else {
     throw err;
@@ -75,7 +75,7 @@ try {
 const command = parsedCommands.command;
 const argv = parsedCommands.argv;
 
-function displayVersion () {
+function version () {
   console.log(pkgJson.version);
   process.exit();
 }
@@ -97,7 +97,7 @@ function getHeaderLogo () {
   });
 }
 
-function displayHelp () {
+function help () {
   const binName = pkgJson.libraryName || pkgJson.productName || Object.keys(pkgJson.bin)[0];
   const binStr = `[bold]{[cyan]{${binName}}}`;
 
@@ -151,7 +151,7 @@ function displayHelp () {
       },
       {
         header: 'Usage',
-        content: `$ ${binStr} [magenta]{<command>} [blue]{[options]}`
+        content: `$ ${binStr} ${cmd('<command>')} [blue]{[options]}`
       },
       {
         header: 'Commands',
@@ -271,8 +271,8 @@ function create () {
   });
 }
 
-function build () {
-  const projectDir = getArgvPaths(argv)[0] || process.cwd();
+function build (projectDir) {
+  projectDir = projectDir || getArgvPaths(argv)[0] || process.cwd();
 
   process.chdir(projectDir);
 
@@ -324,8 +324,8 @@ function build () {
   });
 }
 
-function serve () {
-  let projectDir = getArgvPaths(argv)[0] || process.cwd();
+function serve (projectDir) {
+  projectDir = projectDir || getArgvPaths(argv)[0] || process.cwd();
 
   process.chdir(projectDir);
 
@@ -450,11 +450,244 @@ function serve () {
   });
 }
 
-function deploy (argv) {
-  // TODO: Implement!
-  logger.error('Not Implemented');
-  return Promise.reject(new Error('Not Implemented'));
-  // return commands.serve(deployPath, options);
+function deploy (projectDir) {
+  projectDir = projectDir || getArgvPaths(argv)[0] || process.cwd();
+
+  const optionDefinitions = [
+    {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
+    {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)},
+    {name: 'open', alias: 'o', type: String},
+    {name: 'clipboard', alias: 'l', type: String, defaultValue: null},
+    {name: 'submit', alias: 's', type: String, defaultValue: null}
+  ];
+
+  const options = commandLineArgs(optionDefinitions, {argv});
+  options.directory = path.resolve(options.directory);
+  options.open = !('open' in options) || options.open === 'false' ? false : true;
+  options.clipboard = options.clipboard === 'false' ? false : true;
+  options.submit = options.submit === 'false' ? false : true;
+
+  projectDir = options.directory;
+  process.chdir(projectDir);
+
+  return readPackage(projectDir).then(pkg => {
+    if (!pkg.scripts.deploy.toLowerCase().trim().endsWith(pkgDefault.scripts.deploy)) {
+      const spawn = require('child_process').spawn;
+
+      logger.log(`Deploying project using custom "deploy" npm script …`);
+
+      const child = spawn('npm', ['run', 'deploy'], {nodejs: true});
+      child.stdout.setEncoding('utf8');
+      child.stdout.on('data', logger.info);
+      child.stdout.on('error', logger.error);
+
+      return Promise.resolve(pkg.scripts.deploy);
+    }
+
+    return next();
+  }).catch(() => {
+    return next();
+  });
+
+  function next () {
+    const brunch = require('brunch');
+    const clipboardy = require('clipboardy');
+    const glob = require('glob');
+    const opn = require('opn');
+
+    const submitToIndex = require('./lib/submit.js').submit;
+
+    return new Promise((resolve, reject) => {
+      let deployPath = null;
+      try {
+        deployPath = path.resolve(projectDir, require(options.config).paths.public);
+      } catch (err) {
+      }
+
+      deployPath = deployPath || projectDir;
+      process.chdir(projectDir);
+
+      options = options || {};
+      options.config = options.config || getBrunchConfigPath(deployPath, options);
+
+      logger.log(`Deploying project "${deployPath}" …`);
+
+      return build(deployPath, options).then(builtPath => {
+        if (builtPath) {
+          deployPath = builtPath;
+          buildDone(builtPath);
+        }
+      }).catch(() => {
+        buildDone();
+      });
+
+      function buildDone (builtPath) {
+        return fs.readJson(path.join(builtPath ? builtPath : deployPath, 'package.json')).then(pkgObj => {
+          return pkgObj;
+        }, err => {
+          return fs.readJson(path.join(deployPath, 'package.json')).then(pkgObj => {
+            return pkgObj;
+          }, () => {
+            return {};
+          });
+        }).then(pkgObj => {
+          pkgObj = pkgObj || {};
+          let rootDir = path.basename(deployPath);
+          if (deployPath === builtPath) {
+            rootDir = path.basename(path.resolve(builtPath, '..'));
+          }
+          return deployToIPFS(options, deployPath, rootDir, pkgObj).then(deployedUrl => {
+            if (!deployedUrl) {
+              throw new Error(`Unknown error occurred upon deploying project "${deployPath}"`);
+            }
+            return deployedUrl;
+          }, err => {
+            throw err;
+          });
+        }).catch(err => {
+          if (err) {
+            logger.error(`Could not deploy project "${deployPath}":`, err);
+          } else {
+            logger.error(`Could not deploy project "${deployPath}"`);
+          }
+          throw err;
+          process.exit(1);
+        });
+      }
+    });
+
+    const deployToIPFS = (options, deployPath, rootDir, pkgObj) => {
+      const IPFS = require('ipfs-daemon');
+
+      const ipfsAddFiles = ipfsNode => {
+        // The IPFS daemon is running, and the IPFS node is now ready to use.
+        return new Promise((resolve, reject) => {
+          glob('**/*', {
+            cwd: deployPath,
+            dot: true,
+            nodir: true,
+            ignore: [
+              '.git/**',
+              'node_modules/**',
+              'ipfs/**'
+            ]
+          }, (err, files) => {
+            if (err || !files) {
+              reject(new Error('Could not find public files to deploy'));
+              return;
+            }
+            resolve(files);
+          });
+        }).then(files => {
+          const crypto = require('crypto');
+          let hash = crypto.createHash('sha256');
+          let strToHash = '';
+
+          let filesToAddPromises = files.map(filename => {
+            return new Promise((resolve, reject) => {
+              let file = {
+                _realPath: path.join(deployPath, filename),
+                path: `${rootDir}/${filename}`,
+                content: fs.createReadStream(path.join(deployPath, filename))
+              };
+              file.content.on('data', data => {
+                strToHash += file.path + ';' + data.toString();
+              });
+              file.content.on('end', () => {
+                resolve(file);
+              });
+              file.content.on('error', reject);
+            });
+          });
+
+          return Promise.all(filesToAddPromises).then(filesToAdd => {
+            hash.update(strToHash);
+
+            const rootDirHash = hash.digest('hex');
+
+            filesToAdd.map(file => {
+              file.path = `${rootDirHash}/${file.path}`;
+              file.content = fs.createReadStream(file._realPath);
+              delete file._realPath;
+              return file;
+            });
+
+            return ipfsNode.files.add(filesToAdd);
+          });
+        }).then(filesAdded => {
+          const dirMultihash = filesAdded[filesAdded.length - 1].hash;
+          const numFiles = filesAdded.length - 1;
+          logger.info(`Successfully published directory "${deployPath}" (file${numFiles === 1 ? '' : 's'}) to IPFS: ${dirMultihash}`);
+          const deployedUrl = `https://ipfs.io/ipfs/${dirMultihash}/${rootDir}/`;
+          return deployedUrl;
+        }, err => {
+          logger.error('Error adding to IPFS:', err);
+        });
+      };
+
+      let ipfsNode = null;
+      return new Promise((resolve, reject) => {
+        let ipfsNodeReady = false;
+        logger.info('Starting IPFS node');
+        ipfsNode = new IPFS();
+        ipfsNode.on('ready', () => {
+          logger.info('IPFS node is ready');
+          ipfsNodeReady = true;
+          resolve(ipfsAddFiles(ipfsNode));
+        });
+        ipfsNode.on('error', err => {
+          ipfsNodeReady = true;
+          reject(new Error('Error occurred with IPFS node: ' + err));
+        });
+        setTimeout(() => {
+          if (!ipfsNodeReady) {
+            reject(new Error(`Could not connect to IPFS node (timed out after ${options.timeout / 1000} seconds)`));
+          }
+        }, options.timeout);
+      }).then(deployedUrl => new Promise((resolve, reject) => {
+        if (deployedUrl) {
+          logger.log(`Deployed project to ${deployedUrl}`);
+          // Copy to the user's clipboard the URL of the deployed project.
+          if (options.clipboard) {
+            clipboardy.writeSync(deployedUrl);
+          }
+          if (options.open) {
+            opn(deployedUrl, {wait: false});
+          }
+          if (options.submit) {
+            submitToIndex(deployedUrl);
+          }
+        }
+
+        if (options.disconnectTimeout) {
+          logger.info(`Keeping IPFS node open (for ${options.disconnectTimeout / 1000} seconds)`);
+        }
+
+        let ipfsNodeStopped = false;
+
+        setTimeout(() => {
+          logger.info('Stopping IPFS node');
+
+          ipfsNode.stop();
+          ipfsNode = null;
+
+          logger.info('IPFS node stopped');
+
+          resolve(deployedUrl);
+
+          setTimeout(() => {
+            if (ipfsNode) {
+              reject(new Error(`Could not stop IPFS node (timed out after ${options.timeout / 1000} seconds)`));
+            }
+          }, options.timeout);
+
+          if (!ipfsNode) {
+            process.exit();
+          }
+        }, options.disconnectTimeout);
+      }));
+    };
+  };
 }
 
 switch (command) {
@@ -471,7 +704,7 @@ switch (command) {
     deploy();
     break;
   case 'help':
-    displayHelp();
+    help();
     break;
   // case 'update':
   //   updateRuntime();
@@ -480,112 +713,9 @@ switch (command) {
     if (argv.includes('-v') ||
         argv.includes('--v') ||
         argv.includes('--version')) {
-      displayVersion();
+      version();
       break;
     }
-    displayHelp();
+    help();
     break;
 }
-
-// program
-//   .command('deploy [path]')
-//   .alias('d')
-//   .description('Deploy (to a static CDN) an A-Frame project in path (default: current directory).')
-//   .option('-p, --production', 'same as `--env production`')
-//   .option('-c, --config [path]', 'specify a path to Brunch config file')
-//   .option('-t, --timeout [timeout]', 'timeout (in milliseconds) for connecting to CDN (default: `5000`)', parseFloat, 5000)
-//   .option('-d, --disconnect-timeout [timeout]', 'timeout (in milliseconds) for disconnecting to CDN (default: `10000`)', parseFloat, 10000)
-//   .option('--no-open', 'do not automatically open browser window')
-//   .option('--no-clipboard', 'do not automatically add deployed URL to clipboard')
-//   .option('--no-submit', 'do not submit site to the A-Frame Index')
-//   .action((filePath, options) => {
-//     displayLogo();
-//     setTimeout(() => {
-//       process.stdout.write('\n');
-//       commands.deploy(filePath, options);
-//     }, 150);
-//   });
-//
-// program
-//   .command('submit [url]')
-//   .alias('i')
-//   .description('Submit site URL (of an A-Frame project) to the A-Frame Index.')
-//   .option('-t, --timeout [timeout]', 'timeout (in milliseconds) for submitting to A-Frame Index API (default: `5000`)', parseFloat, 5000)
-//   .option('--no-open', 'do not automatically open browser window')
-//   .option('--no-clipboard', 'do not automatically add deployed URL to clipboard')
-//   .option('--no-submit', 'do not submit site to the A-Frame Index')
-//   .action((siteUrl, options) => {
-//     displayLogo();
-//     setTimeout(() => {
-//       process.stdout.write('\n');
-//       commands.submit(siteUrl, options);
-//     }, 150);
-//   });
-//
-// let args = process.argv.slice();
-// const programName = args[1] = 'aframe';
-// const helpFlag = args.includes('--help') || args.includes('-h');
-// const helpCommand = args.includes('help') || args.includes('h');
-// const help = helpFlag || helpCommand;
-// const versionFlag = args.includes('--version') || args.includes('-v');
-// const versionCommand = args.includes('version') || args.includes('v');
-// const version = versionFlag || versionCommand;
-// let showInvalidMessage = args.length > 2 && !help && !version;
-//
-// const command = args[2];
-//
-// const validCommand = program.commands.some(cmd => {
-//   return cmd.name() === command || cmd.alias() === command;
-// });
-//
-// showInvalidMessage = !validCommand && !help && !version;
-//
-// function init () {
-//   // User ran command `aframe`.
-//   if (args.length < 3) {
-//     displayLogo();
-//     process.on('exit', () => {
-//       process.stdout.write('\n');
-//       if (args.length < 3) {
-//         displayHelp();
-//       }
-//     });
-//
-//     setTimeout(() => {
-//       if (args.length < 3) {
-//         process.exit();
-//       }
-//     }, 150);
-//     return;
-//   }
-//
-//   // User ran command `aframe <command> --help`.
-//   if (args.length < 4 && helpFlag) {
-//     displayHelp();
-//     process.exit(0);
-//   }
-//
-//   if (help && validCommand) {
-//     console.log();
-//     console.error(`  ${chalk.black.bgGreen('Command:')} ${chalk.bold.cyan(programName)} ${chalk.magenta(command)}`);
-//   }
-//
-//   program.parse(args);
-//
-//   if (!validCommand) {
-//     if (showInvalidMessage) {
-//       console.log();
-//       console.error(`  ${chalk.black.bgRed('Invalid command:')} ${chalk.cyan(programName)} ${chalk.magenta(command)}`);
-//     }
-//     displayHelp();
-//     process.exit(1);
-//   }
-// }
-//
-// init();
-//
-// module.exports.init = init;
-// module.exports.displayHelp = displayHelp;
-// module.exports.displayLogo = displayLogo;
-// module.exports.program = program;
-// module.exports.programName = programName;
