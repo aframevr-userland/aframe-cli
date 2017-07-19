@@ -39,7 +39,7 @@ AFRAME.registerComponent('hotspot-helper', {
     });
 
     // Mouse-wheel distance.
-    window.addEventListener('wheel', this.handleMouseWheel.bind(this));
+    window.addEventListener('wheel', this.handleWheel.bind(this));
 
     // Rotation.
     this.rotation = uiContainer.querySelector('#hh-rotation');
@@ -171,7 +171,7 @@ AFRAME.registerComponent('hotspot-helper', {
     getSelection().removeAllRanges();
   },
 
-  handleMouseWheel: function (e) {
+  handleWheel: function (e) {
     var input = this.distanceInput;
     var data = this.data;
     var increment = e.deltaY < 0 ? data.distanceIncrement : -data.distanceIncrement;
