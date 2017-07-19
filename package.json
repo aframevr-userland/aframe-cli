@@ -10,7 +10,7 @@
     "aframe": "index.js"
   },
   "license": "MIT",
-  "repository": "cvan/aframe-cli",
+  "repository": "aframevr-userland/aframe-cli",
   "homepage": "https://github.com/aframevr-userland/aframe-cli",
   "bugs": {
     "url": "https://github.com/aframevr-userland/aframe-cli/issues"
