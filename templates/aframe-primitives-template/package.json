@@ -18,6 +18,7 @@
     "aframe-cli": "0.5.7"
   },
   "aframe": {
+    "template_master": true,
     "template": "primitives",
     "name": "A-Frame Primitives",
     "author": "A-Frame authors",

@@ -19,6 +19,7 @@
     "aframe-cli": "0.5.16"
   },
   "aframe": {
+    "template_master": true,
     "template": "360-tour",
     "name": "A-Frame 360° Tour",
     "author": "A-Frame authors",

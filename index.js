@@ -27,10 +27,10 @@ const createOrReadPackage = utils.createOrReadPackage;
 const getArgvPaths = utils.getArgvPaths;
 const getBrunchConfigPath = utils.getBrunchConfigPath;
 const getTemplateByAliasOrUrl = utils.getTemplateByAliasOrUrl;
-const initPackageFromTemplate = utils.initPackageFromTemplate;
 const mergePackage = utils.mergePackage;
 const pkgDefault = utils.pkgDefault;
 const readPackage = utils.readPackage;
+const rewritePackage = utils.rewritePackage;
 const templatesByAlias = utils.templatesByAlias;
 
 const validCommands = [null, 'create', 'build', 'serve', 'deploy', 'submit', 'version', 'help', 'update'];
@@ -259,7 +259,7 @@ function create () {
           logger: logger,
           rootPath: projectDir,
           pkgType: ['package', 'bower'],
-        });
+        }).then(postinstall);
       });
     });
   }
@@ -270,7 +270,14 @@ function create () {
     logger: logger,
     rootPath: projectDir,
     commandName: 'aframe create'
-  });
+  }).then(postinstall);
+
+  function postinstall () {
+    logger.log(`Rewriting "package.json" file in "${projectDir}" …`);
+    return rewritePackage(projectDir, {
+      force: argv.includes('--force') || argv.includes('-f')
+    });
+  }
 }
 
 function build (projectDir) {

@@ -18,6 +18,7 @@
     "aframe-cli": "0.5.16"
   },
   "aframe": {
+    "template_master": true,
     "template": "room",
     "name": "A-Frame Room",
     "author": "A-Frame authors",

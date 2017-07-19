@@ -19,6 +19,7 @@
     "aframe-cli": "0.5.16"
   },
   "aframe": {
+    "template_master": true,
     "template": "model",
     "name": "A-Frame Model Viewer",
     "author": "A-Frame authors",
