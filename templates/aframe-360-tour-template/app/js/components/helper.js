@@ -1,32 +1,36 @@
+/* global AFRAME, THREE */
+
 AFRAME.registerComponent('hotspot-helper', {
   schema: {
-    target: { type: 'selector' },
-    distance: { type: 'number', default: 5 },
-    distanceIncrement: { type: 'number', default: 0.25 },
+    target: {type: 'selector'},
+    distance: {type: 'number', default: 5},
+    distanceIncrement: {type: 'number', default: 0.25},
   },
 
   init: function () {
     if (!this.data.target) {
-      console.error('Hotspot-helper: You must specify a target element!')
+      console.error('Hotspot-helper: You must specify a target element!');
       return;
     }
+
     var self = this;
+
     this.camera = document.querySelector('[camera]');
     this.targetRotationOrigin = this.data.target.getAttribute('rotation');
     this.targetPositionOrigin = this.data.target.getAttribute('position');
 
-    // Helper UI
+    // Helper UI.
     var uiContainer = this.makeUi();
     document.body.appendChild(uiContainer);
 
-    // enabled
+    // Enabled.
     this.enabled = uiContainer.querySelector('#hh-enabled');
     this.enabled.addEventListener('click', function () {
-      uiContainer.dataset.enabled = self.enabled.checked ? true : false;
+      uiContainer.dataset.enabled = !!self.enabled.checked;
     });
 
-    // set distance.
-    this.distanceInput = distanceInput = uiContainer.querySelector('#hh-distance');
+    // Set distance.
+    var distanceInput = this.distanceInput = uiContainer.querySelector('#hh-distance');
     distanceInput.addEventListener('input', function () {
       self.updateDistance(this.value);
     });
@@ -57,7 +61,7 @@ AFRAME.registerComponent('hotspot-helper', {
     this.position = uiContainer.querySelector('#hh-position');
 
     // Empty object3D for position.
-    this.targetObject = targetObject = new THREE.Object3D();
+    var targetObject = this.targetObject = new THREE.Object3D();
     this.dolly = new THREE.Object3D();
     this.dolly.add(targetObject);
     this.el.object3D.add(this.dolly);
@@ -72,91 +76,102 @@ AFRAME.registerComponent('hotspot-helper', {
     uiContainer.id = 'hh';
     var markup = `
     <style>
-    #hh {
-      position: absolute;
-      top: 0; left: 0;
-      padding: 10px;
-      margin: 10px;
-      background: #333333;
-      color: white;
-      font-family: Helvetica, Arial, Sans-Serif;
-    }
+      #hh-heading {
+        font-family: Consolas, Andale Mono, monospace;
+      }
 
-    #hh h1 {
-      margin: 0;
-    }
+      #hh {
+        background: #333;
+        color: #fff;
+        font-family: Helvetica, Arial, sans-serif;
+        left: 0;
+        margin: 10px;
+        padding: 10px;
+        position: absolute;
+        top: 0;
+      }
 
-    #hh h2 {
-      margin: 10px 0 10px 0;
-      font-weight: 200;
-    }
+      #hh h1 {
+        margin: 0;
+      }
 
-    #hh[data-enabled="false"] section {
-      display: none;
-    }
+      #hh h2 {
+        font-weight: 200;
+        margin: 10px 0;
+      }
 
-    #hh section {
-      margin: 20px 0 20px 0;
-    }
+      #hh[data-enabled="false"] section {
+        display: none;
+      }
 
-    #hh .hh-check {
-      display: block;
-      font-size: 0.75rem;
-      margin: 8px 0 8px 0;
-    }
+      #hh section {
+        margin: 20px 0;
+      }
 
-    #hh .hh-tip {
-      display: block;
-      font-size: 0.75rem;
-      color: rgb(148, 148, 148);
-      margin: 8px 0 8px 0;
-    }
+      #hh .hh-check,
+      #hh .hh-tip {
+        display: block;
+        font-size: .75rem;
+        margin: 8px 0;
+      }
 
-    #hh input[type="text"] {
-      border: none;
-      background: rgb(108, 108, 108);
-      color: white;
-      padding: 5px;
-    }
+      #hh .hh-tip {
+        color: rgb(148,148,148);
+      }
 
-    #hh input[type="button"] {
-      background: white;
-      padding: 5px;
-      border: none;
-    }
+      #hh input[type="text"] {
+        border: none;
+        background: rgb(108,108,108);
+        color: #fff;
+        padding: 5px;
+      }
 
-    #hh input[type="button"]:active {
-      background: rgb(47, 77, 135);
-      color: white;
-    }
+      #hh input[type="button"] {
+        background: #fff;
+        border: none;
+        padding: 5px;
+      }
+
+      #hh input[type="button"]:active {
+        background: rgb(47,77,135);
+        color: #fff;
+      }
     </style>
 
-    <h1>Hotspot-helper</h1>
+    <h1 id="hh-heading" class="hh-heading">hotspot-helper</h1>
 
     <span class="hh-check">
-      <input id="hh-enabled" type="checkbox" checked/> Enabled
+      <label>
+        <input id="hh-enabled" type="checkbox" checked> Enabled
+      </label>
     </span>
 
     <section>
-      <input id="hh-distance" size="5" type="text"></input> Hotspot distance
-      <span class="hh-tip">Use mouse scroll to adjust distance</span>
+      <label>
+        <input id="hh-distance" size="5" type="text"> Hotspot distance
+        <span class="hh-tip">Use mouse scroll to adjust distance</span>
+      </label>
     </section>
 
     <section>
-      <h2>Position</h2>
-      <input id="hh-position" size="20" type="text" value="1.000 1.000 1.000"/>
-      <input id="hh-copy-position" type="button" value="Copy to Position"/>
+      <label>
+        <h2>Position</h2>
+        <input id="hh-position" size="20" type="text" value="1.000 1.000 1.000">
+        <input id="hh-copy-position" type="button" value="Copy to Position">
+      </label>
     </section>
 
     <section>
-      <h2>Rotation</h2>
-      <input id="hh-rotation" size="20" type="text" value="1.000 1.000 1.000"/>
-      <input id="hh-copy-rotation" type="button" value="Copy to Rotation"/>
-      <span class="hh-check">
-        <input id="hh-lookat" type="checkbox"/> Look at origin
-      </span>
+      <h2><label for="hh-rotation">Rotation</label></h2>
+      <input id="hh-rotation" size="20" type="text" value="1.000 1.000 1.000">
+      <input id="hh-copy-rotation" type="button" value="Copy to Rotation">
+      <label>
+        <span class="hh-check">
+          <input id="hh-lookat" type="checkbox"> Look at origin
+        </span>
+      </label>
     </section>
-    `
+    `;
     uiContainer.innerHTML = markup;
     return uiContainer;
   },
@@ -168,7 +183,9 @@ AFRAME.registerComponent('hotspot-helper', {
   copyToClipboard: function (input) {
     input.select();
     document.execCommand('copy');
-    getSelection().removeAllRanges();
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    }
   },
 
   handleWheel: function (e) {
@@ -176,7 +193,9 @@ AFRAME.registerComponent('hotspot-helper', {
     var data = this.data;
     var increment = e.deltaY < 0 ? data.distanceIncrement : -data.distanceIncrement;
     var value = parseFloat(input.value) + increment;
-    if (value < 0) value = 0;
+    if (value < 0) {
+      value = 0;
+    }
     input.value = value;
     this.updateDistance(value);
   },
@@ -210,7 +229,11 @@ AFRAME.registerComponent('hotspot-helper', {
       this.dolly.rotation.copy(rotation);
       var position = this.targetObject.getWorldPosition();
       var cords = position.x.toFixed(2) + ' ' + position.y.toFixed(2) + ' ' + position.z.toFixed(2);
-      target.setAttribute('position', { x: position.x, y: position.y, z: position.z });
+      target.setAttribute('position', {
+        x: position.x,
+        y: position.y,
+        z: position.z
+      });
       this.position.value = cords;
       this.updateRotation();
     } else {
