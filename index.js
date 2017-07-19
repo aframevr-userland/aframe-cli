@@ -353,6 +353,9 @@ function serve (projectDir) {
 
   process.chdir(projectDir);
 
+  let clipboarded = false;
+  let opened = false;
+
   return createOrReadPackage(projectDir).then(pkg => {
     if (pkg.scripts.serve.toLowerCase().trim().indexOf(pkgDefault.scripts.serve) === -1) {
       const spawn = require('child_process').spawn;
@@ -397,6 +400,7 @@ function serve (projectDir) {
     options.clipboard = options.clipboard === 'false' ? false : true;
     options.server = true;
     options.network = true;
+    options.persistent = true;
 
     projectDir = options.directory;
     process.chdir(projectDir);
@@ -413,6 +417,7 @@ function serve (projectDir) {
       try {
         const watcher = brunchWatch(options, () => {
           // Saves preview videos from recorder component.
+          /*
           watcher.server.on('request', function (req, res) {
             const method = req.method.toLowerCase();
             const pathname = url.parse(req.url).pathname;
@@ -459,14 +464,16 @@ function serve (projectDir) {
               form.parse(req);
             }
           });
+          */
 
           logger.log(`Local server running: ${serverUrl}`);
 
-          if (options.clipboard) {
+          if (!clipboarded && options.clipboard) {
             clipboardy.writeSync(serverUrl);
           }
 
-          if (options.open) {
+          if (!opened && options.open) {
+            opened = true;
             opn(serverUrl, {wait: false});
           }
 
