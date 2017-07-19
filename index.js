@@ -23,6 +23,7 @@ const commands = require('./commands/index.js');
 const pkgJson = require('./package.json');
 const utils = require('./lib/utils.js');
 
+const createGitignore = utils.createGitignore;
 const createOrReadPackage = utils.createOrReadPackage;
 const getArgvPaths = utils.getArgvPaths;
 const getBrunchConfigPath = utils.getBrunchConfigPath;
@@ -274,9 +275,14 @@ function create () {
 
   function postinstall () {
     logger.log(`Rewriting "package.json" file in "${projectDir}" …`);
-    return rewritePackage(projectDir, {
-      force: argv.includes('--force') || argv.includes('-f')
-    });
+    return Promise.all([
+      rewritePackage(projectDir, {
+        force: argv.includes('--force') || argv.includes('-f')
+      }),
+      createGitignore(projectDir, {
+        force: argv.includes('--force') || argv.includes('-f')
+      })
+    ]);
   }
 }
 
