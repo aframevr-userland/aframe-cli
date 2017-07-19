@@ -56,6 +56,9 @@ switch (process.argv[2]) {
   case 'generate':
     process.argv[2] = 'build';
     break;
+  case 'server':
+  case 'dev':
+    process.argv[2] = 'serve';
   case 'publish':
   case 'push':
     process.argv[2] = 'deploy';
