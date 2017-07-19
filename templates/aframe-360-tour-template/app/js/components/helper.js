@@ -25,46 +25,46 @@ AFRAME.registerComponent('hotspot-helper', {
       uiContainer.dataset.enabled = self.enabled.checked ? true : false;
     });
 
-    // set distance
+    // set distance.
     this.distanceInput = distanceInput = uiContainer.querySelector('#hh-distance');
     distanceInput.addEventListener('input', function () {
       self.updateDistance(this.value);
     });
     distanceInput.value = this.data.distance;
 
-    // copy position to clipboard
+    // Copy position to clipboard.
     var copyPosition = uiContainer.querySelector('#hh-copy-position');
     copyPosition.addEventListener('click', function () {
       self.copyToClipboard(self.position);
     });
 
-    // mousewheel distance
-    document.body.addEventListener('mousewheel', this.handleMouseWheel.bind(this));
+    // Mouse-wheel distance.
+    window.addEventListener('wheel', this.handleMouseWheel.bind(this));
 
-    // rotation
+    // Rotation.
     this.rotation = uiContainer.querySelector('#hh-rotation');
 
-    // copy rotation to clipboard
+    // Copy rotation to clipboard.
     var copyRotation = uiContainer.querySelector('#hh-copy-rotation');
     copyRotation.addEventListener('click', function () {
       self.copyToClipboard(self.rotation);
     });
 
-    // look at
+    // Look at.
     this.lookToggle = uiContainer.querySelector('#hh-lookat');
 
-    // position
+    // Position.
     this.position = uiContainer.querySelector('#hh-position');
 
-    // empty object3D for position.
+    // Empty object3D for position.
     this.targetObject = targetObject = new THREE.Object3D();
     this.dolly = new THREE.Object3D();
     this.dolly.add(targetObject);
     this.el.object3D.add(this.dolly);
     this.updateDistance(this.data.distance);
 
-    // set positioning on target so that clicks are not triggered when placing hotspot.
-    this.data.target.setAttribute('hotspot', { positioning: true });
+    // Set positioning on target so that clicks are not triggered when placing hotspot.
+    this.data.target.setAttribute('hotspot', {positioning: true});
   },
 
   makeUi: function () {
