@@ -10,6 +10,7 @@ process.on('SIGTERM', () => {
 });
 
 const path = require('path');
+const urlParse = require('url').parse;
 
 const chalk = require('chalk');
 const commandLineArgs = require('command-line-args');
@@ -370,54 +371,110 @@ function serve (projectDir) {
       return Promise.resolve(pkg.scripts.serve);
     }
 
-    return next();
+    return serveNext();
   }).catch(() => {
-    return next();
+    return serveNext();
   });
 
-  function next () {
+  function serveNext () {
     const url = require('url');
 
-    const brunchWatch = require('brunch').watch;
+    const liveServer = require('live-server');
     const clipboardy = require('clipboardy');
     const formidable = require('formidable');
     const opn = require('opn');
 
     const optionDefinitions = [
       {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
-      {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)},
+      // {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)},
+      {name: 'ignore', alias: 'i', type: Array, defaultValue: []},
+      {name: 'https', alias: 's', type: String, defaultValue: null},
+      {name: 'host', alias: 'H', type: String, defaultValue: null},
+      {name: 'port', alias: 'P', type: Number, defaultValue: 3333},
+      {name: 'reload', alias: 'r', type: Number, defaultValue: 0},  // Reload after a delayed amount of time, in milliseconds (default: `0`).
       {name: 'open', alias: 'o', type: String},
       {name: 'clipboard', alias: 'l', type: String, defaultValue: null},
-      {name: 'port', alias: 'P', type: Number, defaultValue: 3333},
-      {name: 'debug', alias: 'e', type: String},
-      {name: 'env', alias: 'n', type: String},
-      {name: 'production', alias: 'p', type: Boolean, defaultValue: false}
+      // {name: 'debug', alias: 'e', type: String},
+      // {name: 'env', alias: 'n', type: String},
+      // {name: 'production', alias: 'p', type: Boolean, defaultValue: false},
     ];
 
     const options = commandLineArgs(optionDefinitions, {argv});
-    options.directory = path.resolve(options.directory);
+
+    projectDir = options.directory = path.resolve(options.directory);
+    process.chdir(projectDir);
+
+    // const optionsFile = require(options.config);
+
+    options.https = (process.env.HTTPS || process.env.SSL || options.https || options.ssl) === 'false' ? false : true;
+    // options.host = process.env.HOST || process.env.IP || (optionsFile.server && optionsFile.server.host) || '0.0.0.0';
+    options.host = process.env.HOST || process.env.IP || options.host || '0.0.0.0';
+    // options.port = process.env.PORT || (optionsFile.server && optionsFile.server.port) || 3333;
+    options.port = process.env.PORT || options.port || 3333;
+
     options.open = !('open' in options) || options.open === 'false' ? false : true;
     options.clipboard = options.clipboard === 'false' ? false : true;
+
     options.server = true;
     options.network = true;
     options.persistent = true;
 
-    projectDir = options.directory;
-    process.chdir(projectDir);
+    logger.log(`Watching "${projectDir}" …`);
 
+    const serverHost = !options.host || options.host === '0.0.0.0' ? 'localhost' : options.host;
+    const serverPort = options.port;
+    const serverUrl = `http${options.https ? 's' : ''}://${serverHost}:${serverPort}/`;
+
+    const liveServerParams = {
+      root: options.directory,
+      port: options.port,
+      host: options.host,
+      open: options.open,
+      ignore: options.ignore,
+      // file: "index.html",  // When set, serve this file for every 404 (useful for SPAs).
+      wait: options.reload,
+      mount: [  // Mount a directory to a route.
+        [
+          '/components',
+          './node_modules'
+        ]
+      ],
+      logLevel: 2,  // 0 = errors only; 1 = some; 2 = lots
+      middleware: [
+        function (req, res, next) {
+
+          // var path = urlParse(req.url).pathname;
+          // if (path.indexOf('/' + consts.DIST) !== -1) {
+          //   req.url = req.url.replace('/dist/', '/build/');
+          // }
+
+          console.log(res);
+
+          next();
+        }
+      ]  // Takes an array of `connect`-compatible middleware that are injected into the server's middleware stack.
+    };
+    liveServer.start(liveServerParams);
+
+    logger.log(`Local server running: ${serverUrl}`);
+
+    // Copy the server URL to the user's clipboard.
+    if (!clipboarded && options.clipboard) {
+      clipboardy.writeSync(serverUrl);
+    }
+
+    if (!opened && options.open) {
+      opened = true;
+      opn(serverUrl, {wait: false});
+    }
+
+    return serverUrl;
+
+    /*
     return new Promise((resolve, reject) => {
-      const optionsFile = require(options.config);
-
-      logger.log(`Watching "${projectDir}" …`);
-
-      // Copy the server URL to the user's clipboard.
-      const port = (optionsFile.server && optionsFile.server.port) || 3333;
-      const https = options.https || options.ssl || options.secure || false;
-      const serverUrl = `http${https ? 's' : ''}://localhost:${port}/`;
       try {
         const watcher = brunchWatch(options, () => {
           // Saves preview videos from recorder component.
-          /*
           watcher.server.on('request', function (req, res) {
             const method = req.method.toLowerCase();
             const pathname = url.parse(req.url).pathname;
@@ -464,26 +521,13 @@ function serve (projectDir) {
               form.parse(req);
             }
           });
-          */
-
-          logger.log(`Local server running: ${serverUrl}`);
-
-          if (!clipboarded && options.clipboard) {
-            clipboardy.writeSync(serverUrl);
-          }
-
-          if (!opened && options.open) {
-            opened = true;
-            opn(serverUrl, {wait: false});
-          }
-
-          resolve(serverUrl);
         });
       } catch (err) {
         logger.error(`Could not watch project "${projectDir}" …`);
         reject(err);
       }
     });
+    */
   }
 }
 
