@@ -12,7 +12,7 @@
     "deploy": "aframe deploy"
   },
   "dependencies": {
-    "aframe": "^0.6.0"
+    "aframe": "^0.6.1"
   },
   "devDependencies": {
     "aframe-cli": "0.5.16"
