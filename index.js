@@ -315,37 +315,38 @@ function build (projectDir) {
   });
 
   function next () {
-    const brunchBuild = require('brunch').build;
-
-    const optionDefinitions = [
-      {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
-      {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)}
-    ];
-
-    const options = commandLineArgs(optionDefinitions, {argv});
-
-    return new Promise((resolve, reject) => {
-      logger.log(`Building project "${projectDir}" …`);
-
-      try {
-        brunchBuild(options, resolve);
-      } catch (err) {
-        logger.error(`Could not build project "${projectDir}" …`);
-        throw err;
-      }
-    }).then(() => {
-      let builtPath = null;
-      try {
-        builtPath = path.resolve(projectDir, require(options.config).paths.public);
-      } catch (err) {
-      }
-      if (builtPath) {
-        logger.log(`Built project "${projectDir}" to "${builtPath}"`);
-        return Promise.resolve(builtPath);
-      } else {
-        logger.log(`Built project "${projectDir}"`);
-      }
-    });
+    return Promise.resolve(false);
+    // const brunchBuild = require('brunch').build;
+    //
+    // const optionDefinitions = [
+    //   {name: 'directory', alias: 'd', type: String, defaultOption: true, defaultValue: projectDir},
+    //   {name: 'config', alias: 'c', type: String, defaultValue: getBrunchConfigPath(projectDir)}
+    // ];
+    //
+    // const options = commandLineArgs(optionDefinitions, {argv});
+    //
+    // return new Promise((resolve, reject) => {
+    //   logger.log(`Building project "${projectDir}" …`);
+    //
+    //   try {
+    //     brunchBuild(options, resolve);
+    //   } catch (err) {
+    //     logger.error(`Could not build project "${projectDir}" …`);
+    //     throw err;
+    //   }
+    // }).then(() => {
+    //   let builtPath = null;
+    //   try {
+    //     builtPath = path.resolve(projectDir, require(options.config).paths.public);
+    //   } catch (err) {
+    //   }
+    //   if (builtPath) {
+    //     logger.log(`Built project "${projectDir}" to "${builtPath}"`);
+    //     return Promise.resolve(builtPath);
+    //   } else {
+    //     logger.log(`Built project "${projectDir}"`);
+    //   }
+    // });
   }
 }
 
@@ -425,6 +426,8 @@ function serve (projectDir) {
     const serverPort = options.port;
     const serverUrl = `http${options.https ? 's' : ''}://${serverHost}:${serverPort}/`;
 
+    console.log(options.directory);
+    
     const liveServerParams = {
       root: options.directory,
       port: options.port,
