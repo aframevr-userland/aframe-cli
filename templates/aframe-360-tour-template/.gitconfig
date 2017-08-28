@@ -1,0 +1,10 @@
+.component
+.DS_Store
+.public/
+.sw[ponm]
+*.log
+/build/
+gh-pages
+node_modules/
+public/
+tmp/

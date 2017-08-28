@@ -7,13 +7,15 @@
   "repository": "aframevr-userland/aframe-cli",
   "scripts": {
     "start": "npm run serve",
-    "serve": "aframe serve",
-    "build": "aframe build",
+    "serve": "webpack-dev-server --env.dev --host 0.0.0.0 --progress --colors --hot -d --inline --watch --watch-content-base",
+    "build": "webpack --define process.env.NODE_ENV='\"production\"' --progress --colors",
     "deploy": "aframe deploy"
   },
   "dependencies": {
-    "aframe": "^0.6.0",
-    "aframe-look-at-component": "^0.5.1"
+    "aframe": "^0.6.1",
+    "aframe-look-at-component": "^0.5.1",
+    "babili-webpack-plugin": "^0.1.2",
+    "clean-webpack-plugin": "^0.1.16"
   },
   "devDependencies": {
     "aframe-cli": "0.5.16"
