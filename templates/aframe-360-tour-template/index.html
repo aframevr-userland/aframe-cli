@@ -6,8 +6,36 @@
     <title>360&deg; Tour</title>
     <script src="https://unpkg.com/getlibs"></script>
     <script>
-      System.import('./node_modules/aframe/dist/aframe-master.js');
-      System.import('./js/initialize.js');
+      // System.import('./js/initialize.js');
+    </script>
+    <script type="x-module">
+    var pkg = require('./package.json');
+
+    var meta = {};
+    Object.keys(pkg.dependencies).forEach(function (depName) {
+      meta['//unpkg.com/' + depName + '@' + pkg.dependencies[depName].replace(/^\^/, '')] = {
+        // exports: 'AFRAME',
+        // format: 'global'
+      };
+    });
+    console.log(meta);
+
+    SystemJS.config({
+      meta: meta
+    });
+
+    window.AFRAME = require('aframe');
+    require('aframe-look-at-component');
+
+    require('./js/components/tour.js');
+    require('./js/components/panorama.js');
+    require('./js/components/hotspot.js');
+    require('./js/components/helper.js');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Initialized app');
+    });
+
     </script>
     <!-- <script src="node_modules/aframe/dist/aframe-master.js"></script> -->
     <!-- <script src="js/initialize.js"></script> -->

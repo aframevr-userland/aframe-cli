@@ -446,6 +446,20 @@ function serve (projectDir) {
       middleware: [
         function (req, res, next) {
 
+          if (req.url === '/.dependencies.js') {
+            var pkg = require(path.join(options.directory, 'package.json'));
+
+            var meta = {};
+            Object.keys(pkg.dependencies).forEach(function (depName) {
+              meta['//unpkg.com/' + depName + '@' + pkg.dependencies[depName].replace(/^\^/, '')] = {
+                // exports: 'AFRAME',
+                // format: 'global'
+              };
+            });
+
+            req.body = JSON.stringify(meta);
+          }
+
           // var path = urlParse(req.url).pathname;
           // if (path.indexOf('/' + consts.DIST) !== -1) {
           //   req.url = req.url.replace('/dist/', '/build/');
