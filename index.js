@@ -34,6 +34,20 @@ if (process.argv[2] === 'publish' || process.argv[2] === 'push') {
   process.argv[2] = 'deploy';
 }
 
+// For backwards compatibility, convert `aframe new` commands from the old to new CLI format.
+//
+//   aframe new 360-tour           =>  aframe new --template 360-tour
+//   aframe new 360-tour my-scene  =>  aframe new --template 360-tour my-scene
+//
+// NOTE: The new CLI usage is defined here: https://aframe.io/cli/
+//       The new CLI rearchitecture is being properly addressed in PR #68:
+//       https://github.com/aframevr-userland/aframe-cli/pull/68
+if (process.argv[2] === 'new') {
+  if (!process.argv.includes('--template')) {
+    process.argv.splice(3, 0, '--template');
+  }
+}
+
 program
   .command('deploy [path]')
   .alias('d')
